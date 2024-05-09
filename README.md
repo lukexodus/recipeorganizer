@@ -16,7 +16,7 @@ Status: Unfinished
 
 - User can search stored recipes by category.
 
-### Ingredient Lists
+### Recipe Lists
 Status: Unfinished
 
 - User can make, rename, and delete lists.
