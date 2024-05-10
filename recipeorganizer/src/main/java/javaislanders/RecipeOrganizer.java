@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.text.NumberFormat;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -29,6 +30,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     private JButton removeIngrBtn;
     private JButton clearIngrListBtn;
     private JButton analyzeRecipeBtn;
+    private Recipe currentRecipe;
     private JsonObject currentNutritionObject = null;
 
     public RecipeOrganizer() {
@@ -70,7 +72,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
 
         // [Load DB Data]
-        
+
 
         // --------------------------------------------------------------
         // --                       Header Panel                       --
@@ -243,7 +245,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         // --      Nutrition Facts panel      --
         // -------------------------------------
 
-        NutritionFacts nutritionFactsPanel = new NutritionFacts(currentNutritionObject);
+        NutritionFacts nutritionFactsPanel = new NutritionFacts(null);
 
         nutritionAnalyzer.add(analyzeRecipePanel);
         // Adds the initial NutritionFacts panel (has no data) (for placeholder purposes)
@@ -274,6 +276,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             // If ingredient is empty, alert user
             if (ingredient == null || ingredient.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(mainPanel, "Ingredient cannot be empty.");
+                return;
             } 
             else {
                 // Reset text field contents
@@ -285,6 +288,16 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 String ingrEntry = quantity + " " + unit + " " + ingredient;
                 ingrListModel.addElement(ingrEntry);
             }
+
+            int ingrNum = ingrListModel.getSize();
+            // Enables the 'Clear' button if there are items in the list
+            if (ingrNum > 0) {
+                clearIngrListBtn.setEnabled(true);
+            } 
+            // Otherwise, enables it
+            else {
+                clearIngrListBtn.setEnabled(false);
+            }
         } 
         else if (command == "Remove Ingredient") {
             // Remove selected ingredient from the list
@@ -294,6 +307,12 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             } else {
                 JOptionPane.showMessageDialog(mainPanel, "Nothing is selected.");
             }
+
+            int ingrNum = ingrListModel.getSize();
+            // Disables the 'Clear' button if there are no items in the list
+            if (ingrNum == 0) {
+                clearIngrListBtn.setEnabled(false);
+            } 
         } 
         else if (command == "Clear Ingredients List") {
             // Remove all items in the ingredients list
@@ -323,13 +342,30 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             try {
                 // Disables the button to prevent potential problems
                 analyzeRecipeBtn.setEnabled(false);
+                // Alerts the user that the program is currently sending
+                // // i.e. program is unusable at this point
+                // Thread dialogThread = new Thread(new Runnable() {
+                //     @Override
+                //     public void run() {
+                //         // Display the dialog
+                //         JOptionPane.showMessageDialog(null, "Analyzing recipe...", "Alert", JOptionPane.PLAIN_MESSAGE);
+                //     }
+                // });
+                // dialogThread.start();
                 // Sends the request to the API
                 String response = analyzeIngredients(payload);
 
                 // Parses the response to a JsonObject
-                JsonElement nutritionElement = JsonParser.parseString(response);
-                JsonObject nutritionJson = nutritionElement.getAsJsonObject();
-                currentNutritionObject = nutritionJson;
+                // JsonElement nutritionElement = JsonParser.parseString(response);
+                // JsonObject nutritionJson = nutritionElement.getAsJsonObject();
+                // currentNutritionObject = nutritionJson;
+
+                Gson gson = new Gson();
+                Recipe recipe = gson.fromJson(response, Recipe.class);
+                currentRecipe = recipe;
+
+                // Closes the 'Analyzing recipe...' dialog
+                // closeAlertDialog();
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(mainPanel, "Error sending request to the API.\n" + exception.getLocalizedMessage());
                 currentNutritionObject = null;
@@ -340,7 +376,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 // Checks if the response has nutrition data or not.
                 // If it doesn't, it may be that the recipe inputted by the user
                 // is not valid.
-                if (currentNutritionObject.get("calories") == null) {
+                if (currentRecipe.getCalories() == 0) {
                     JOptionPane.showMessageDialog(mainPanel, "Invalid recipe.");
                 }
 
@@ -354,29 +390,24 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                     nutritionAnalyzer.revalidate();
                     nutritionAnalyzer.repaint();
                 }
-                NutritionFacts nutritionFactsPanel = new NutritionFacts(currentNutritionObject);
+                NutritionFacts nutritionFactsPanel = new NutritionFacts(currentRecipe);
                 nutritionAnalyzer.add(nutritionFactsPanel);
                 nutritionAnalyzer.revalidate();
                 nutritionAnalyzer.repaint();
             }
         } 
         else if (command == "Save Recipe") {
-            
+            // Alerts the user if the ingredients list is empty
+            int ingrNum = ingrListModel.getSize();
+            if (ingrNum == 0) {
+                JOptionPane.showMessageDialog(mainPanel, "Ingredients list is empty.");
+                return;
+            }
         }
     }
 
     // Handle changes in the selection of items in a JList
     public void valueChanged(ListSelectionEvent e) {
-        int ingrNum = ingrListModel.getSize();
-        // Disables the 'Clear' button if there are no items in the list
-        if (ingrNum == 0) {
-            clearIngrListBtn.setEnabled(false);
-        } 
-        // Otherwise, enables it
-        else {
-            clearIngrListBtn.setEnabled(true);
-        }
-
         if (!e.getValueIsAdjusting()) {
             // Determines which JList triggered the event
             JList<?> sourceList = (JList<?>) e.getSource();
@@ -408,5 +439,20 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         gbc.gridheight = gridheight;
         gbc.anchor = anchor;
         container.add(component, gbc);
+    }
+
+
+    private static void closeAlertDialog() {
+        // Close the dialog programmatically
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JDialog) {
+                JDialog dialog = (JDialog) window;
+                if (dialog.getTitle().equals("Alert")) {
+                    dialog.dispose(); // Close the dialog
+                    break;
+                }
+            }
+        }
     }
 }
