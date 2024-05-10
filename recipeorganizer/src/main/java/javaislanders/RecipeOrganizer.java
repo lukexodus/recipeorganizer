@@ -20,6 +20,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     JPanel mainPanel;
 
     // Nutrition Analysis
+    private JPanel nutritionAnalyzer;
     private JList<String> ingrList;
     DefaultListModel<String> ingrListModel;
     private JFormattedTextField quantityTextField;
@@ -69,10 +70,12 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
 
         // [Load DB Data]
+        
 
+        // --------------------------------------------------------------
+        // --                       Header Panel                       --
+        // --------------------------------------------------------------
 
-
-        // [Header Panel]
         JPanel header = new JPanel(new BorderLayout());
         JLabel headerTitle = new JLabel("Recipe Organizer", SwingConstants.CENTER);
         headerTitle.setFont(new Font("Inter", Font.BOLD, 32));
@@ -80,13 +83,14 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         header.add(headerTitle, BorderLayout.CENTER);
         this.add(header, BorderLayout.NORTH);
 
-
-
-        // [Main Panel]
+        // --------------------------------------------------------------
+        // --                        MAIN PANEL                        --
+        // --------------------------------------------------------------
         // Contains the 3 features:
         // - Nutrition Analysis
         // - Recipe Lists
         // - Recipe Categorization
+
         mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints mainGbc = new GridBagConstraints();
         mainGbc.fill = GridBagConstraints.VERTICAL;
@@ -97,11 +101,17 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         this.add(mainPanelPane, BorderLayout.CENTER);
 
 
-        // [Nutrition Analysis Panel]
-        // - Contains Nutrition Analyzer panel and Nutrition Facts Panel
-        JPanel nutritionAnalyzer = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
+        // ----------------------------------------------------
+        // --            Nutrition Analysis Panel            --
+        // ----------------------------------------------------
+        // - Contains Nutrition Analyzer panel and Nutrition Facts panel
 
-        // Nutrition Analyzer panel
+        nutritionAnalyzer = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
+
+        // -------------------------------------
+        // --     Nutrition Analyzer panel    --
+        // -------------------------------------
+
         JPanel analyzeRecipePanel = new JPanel(new GridBagLayout());
 
         GridBagConstraints analyzeRecipeGbc = new GridBagConstraints();
@@ -229,44 +239,14 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         addComponent(analyzeRecipePanel, saveRecipeBtn, analyzeRecipeGbc, 
         0, 12, 2, 1, GridBagConstraints.CENTER);
 
-    
-        // Nutrition Facts Panel
-        JPanel nutritionFactsPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints nutritionFactsGbc = new GridBagConstraints();
-        nutritionFactsGbc.fill = GridBagConstraints.HORIZONTAL;
-        nutritionFactsGbc.insets = new Insets(5, 5, 5, 5);
+        // -------------------------------------
+        // --      Nutrition Facts panel      --
+        // -------------------------------------
 
-        JLabel nutritionFactsHeader = new JLabel("Nutrition Facts", SwingConstants.LEFT);
-        nutritionFactsHeader.setFont(new Font("Inter", Font.BOLD, 20));
-        nutritionFactsHeader.setPreferredSize(new Dimension(325, 40));
-        addComponent(nutritionFactsPanel, nutritionFactsHeader, nutritionFactsGbc, 
-        0, 0, 2, 1, GridBagConstraints.CENTER);
-
-        JSeparator nutrFactsSp1 = new JSeparator();
-        addComponent(nutritionFactsPanel, nutrFactsSp1, nutritionFactsGbc, 
-        0, 1, 2, 1, GridBagConstraints.CENTER);
-
-        JLabel amountPerServing = new JLabel("Amount Per Serving", SwingConstants.LEFT);
-        amountPerServing.setFont(new Font("Inter", Font.BOLD, 15));
-        addComponent(nutritionFactsPanel, amountPerServing, nutritionFactsGbc, 
-        0, 2, 2, 1, GridBagConstraints.CENTER);
-
-        JLabel calories = new JLabel("Calories", SwingConstants.LEFT);
-        calories.setFont(new Font("Inter", Font.BOLD, 25));
-        addComponent(nutritionFactsPanel, calories, nutritionFactsGbc, 
-        0, 3, 1, 1, GridBagConstraints.CENTER);
-
-        JLabel caloriesAmount = new JLabel("1774", SwingConstants.RIGHT);
-        caloriesAmount.setFont(new Font("Inter", Font.BOLD, 25));
-        addComponent(nutritionFactsPanel, caloriesAmount, nutritionFactsGbc, 
-        1, 3, 1, 1, GridBagConstraints.CENTER);
-
-        JLabel dailyValue = new JLabel("% Daily Value*", SwingConstants.RIGHT);
-        dailyValue.setFont(new Font("Inter", Font.BOLD, 12));
-        addComponent(nutritionFactsPanel, dailyValue, nutritionFactsGbc, 
-        1, 4, 1, 1, GridBagConstraints.CENTER);
+        NutritionFacts nutritionFactsPanel = new NutritionFacts(currentNutritionObject);
 
         nutritionAnalyzer.add(analyzeRecipePanel);
+        // Adds the initial NutritionFacts panel (has no data) (for placeholder purposes)
         nutritionAnalyzer.add(nutritionFactsPanel);
 
         addComponent(mainPanel, nutritionAnalyzer, mainGbc, 
@@ -345,14 +325,39 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 analyzeRecipeBtn.setEnabled(false);
                 // Sends the request to the API
                 String response = analyzeIngredients(payload);
+
+                // Parses the response to a JsonObject
                 JsonElement nutritionElement = JsonParser.parseString(response);
                 JsonObject nutritionJson = nutritionElement.getAsJsonObject();
                 currentNutritionObject = nutritionJson;
             } catch (Exception exception) {
-                JOptionPane.showMessageDialog(mainPanel, "Error sending request to the API.");
+                JOptionPane.showMessageDialog(mainPanel, "Error sending request to the API.\n" + exception.getLocalizedMessage());
+                currentNutritionObject = null;
             } finally {
                 // Enables back the button
                 analyzeRecipeBtn.setEnabled(true);
+
+                // Checks if the response has nutrition data or not.
+                // If it doesn't, it may be that the recipe inputted by the user
+                // is not valid.
+                if (currentNutritionObject.get("calories") == null) {
+                    JOptionPane.showMessageDialog(mainPanel, "Invalid recipe.");
+                }
+
+                // Updates the NutritionFacts panel.
+                // Removes the previous NutritionFacts panel
+                // and then adds the updated one.
+                Component[] components = nutritionAnalyzer.getComponents();
+                if (components.length > 0) {
+                    Component lastComponent = components[components.length - 1];
+                    nutritionAnalyzer.remove(lastComponent);
+                    nutritionAnalyzer.revalidate();
+                    nutritionAnalyzer.repaint();
+                }
+                NutritionFacts nutritionFactsPanel = new NutritionFacts(currentNutritionObject);
+                nutritionAnalyzer.add(nutritionFactsPanel);
+                nutritionAnalyzer.revalidate();
+                nutritionAnalyzer.repaint();
             }
         } 
         else if (command == "Save Recipe") {
@@ -394,14 +399,14 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         }
     }
 
-    // Add component in a GridBagLayout
-    private static void addComponent(Container container, Component component, GridBagConstraints analyzeRecipeGbc,
+    // Utility function for adding component in a GridBagLayout
+    private static void addComponent(Container container, Component component, GridBagConstraints gbc,
                                      int gridx, int gridy, int gridwidth, int gridheight, int anchor) {
-        analyzeRecipeGbc.gridx = gridx;
-        analyzeRecipeGbc.gridy = gridy;
-        analyzeRecipeGbc.gridwidth = gridwidth;
-        analyzeRecipeGbc.gridheight = gridheight;
-        analyzeRecipeGbc.anchor = anchor;
-        container.add(component, analyzeRecipeGbc);
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        gbc.gridwidth = gridwidth;
+        gbc.gridheight = gridheight;
+        gbc.anchor = anchor;
+        container.add(component, gbc);
     }
 }
