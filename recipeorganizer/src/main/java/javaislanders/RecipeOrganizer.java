@@ -26,6 +26,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     private JTextField unitTextField;
     private JTextField ingrTextField;
     private JButton removeIngrBtn;
+    private JButton clearIngrListBtn;
     private JButton analyzeRecipeBtn;
     private JsonObject currentNutritionObject = null;
 
@@ -40,7 +41,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         this.setTitle("JavaIslanders: Recipe Organizer");
         this.setResizable(true);
         this.setSize(1500, 800);
-        this.setMinimumSize(new Dimension(1000, 800));
+        this.setMinimumSize(new Dimension(1100, 900));
         this.setVisible(true);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
@@ -98,7 +99,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
         // [Nutrition Analysis Panel]
         // - Contains Nutrition Analyzer panel and Nutrition Facts Panel
-        JPanel nutritionAnalyzer = new JPanel(new FlowLayout());
+        JPanel nutritionAnalyzer = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
 
         // Nutrition Analyzer panel
         JPanel analyzeRecipePanel = new JPanel(new GridBagLayout());
@@ -110,12 +111,12 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         JLabel analyzeRecipeHeader = new JLabel("Nutrition Analyzer", SwingConstants.LEFT);
         analyzeRecipeHeader.setFont(new Font("Inter", Font.BOLD, 20));
         addComponent(analyzeRecipePanel, analyzeRecipeHeader, analyzeRecipeGbc, 
-        0, 0, 2, 1, GridBagConstraints.EAST);
+        0, 0, 2, 1, GridBagConstraints.CENTER);
 
         JLabel addIngrLabel = new JLabel("Add Ingredient", SwingConstants.LEFT);
         addIngrLabel.setFont(new Font("Inter", Font.PLAIN, 15));
         addComponent(analyzeRecipePanel, addIngrLabel, analyzeRecipeGbc, 
-        0, 1, 2, 1, GridBagConstraints.EAST);
+        0, 1, 2, 1, GridBagConstraints.CENTER);
 
         // Quantity Input
         // Panel
@@ -187,11 +188,17 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         removeIngrBtn.setEnabled(false);
         removeIngrBtn.addActionListener(this);
         removeIngrBtn.setActionCommand("Remove Ingredient");
+        clearIngrListBtn = new JButton("Clear");
+        clearIngrListBtn.setEnabled(false);
+        clearIngrListBtn.addActionListener(this);
+        clearIngrListBtn.setActionCommand("Clear Ingredients List");
         ingrListPanel.add(ingrListLabel);
         ingrListPanel.add(Box.createHorizontalGlue());
+        ingrListPanel.add(clearIngrListBtn);
+        ingrListPanel.add(Box.createHorizontalStrut(5));
         ingrListPanel.add(removeIngrBtn);
         addComponent(analyzeRecipePanel, ingrListPanel, analyzeRecipeGbc, 
-        0, 5, 2, 1, GridBagConstraints.EAST);
+        0, 5, 2, 1, GridBagConstraints.CENTER);
 
         // Ingredients List
         ingrListModel = new DefaultListModel<>();
@@ -204,8 +211,8 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         addComponent(analyzeRecipePanel, ingrListPane, analyzeRecipeGbc, 
         0, 6, 2, 4, GridBagConstraints.NORTH);
 
-        JSeparator spEnd = new JSeparator();
-        addComponent(analyzeRecipePanel, spEnd, analyzeRecipeGbc, 
+        JSeparator nutritionAnalyzerSp1 = new JSeparator();
+        addComponent(analyzeRecipePanel, nutritionAnalyzerSp1, analyzeRecipeGbc, 
         0, 10, 2, 1, GridBagConstraints.CENTER);
 
         // Analyze Recipe Button
@@ -229,8 +236,38 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         nutritionFactsGbc.fill = GridBagConstraints.HORIZONTAL;
         nutritionFactsGbc.insets = new Insets(5, 5, 5, 5);
 
+        JLabel nutritionFactsHeader = new JLabel("Nutrition Facts", SwingConstants.LEFT);
+        nutritionFactsHeader.setFont(new Font("Inter", Font.BOLD, 20));
+        nutritionFactsHeader.setPreferredSize(new Dimension(325, 40));
+        addComponent(nutritionFactsPanel, nutritionFactsHeader, nutritionFactsGbc, 
+        0, 0, 2, 1, GridBagConstraints.CENTER);
+
+        JSeparator nutrFactsSp1 = new JSeparator();
+        addComponent(nutritionFactsPanel, nutrFactsSp1, nutritionFactsGbc, 
+        0, 1, 2, 1, GridBagConstraints.CENTER);
+
+        JLabel amountPerServing = new JLabel("Amount Per Serving", SwingConstants.LEFT);
+        amountPerServing.setFont(new Font("Inter", Font.BOLD, 15));
+        addComponent(nutritionFactsPanel, amountPerServing, nutritionFactsGbc, 
+        0, 2, 2, 1, GridBagConstraints.CENTER);
+
+        JLabel calories = new JLabel("Calories", SwingConstants.LEFT);
+        calories.setFont(new Font("Inter", Font.BOLD, 25));
+        addComponent(nutritionFactsPanel, calories, nutritionFactsGbc, 
+        0, 3, 1, 1, GridBagConstraints.CENTER);
+
+        JLabel caloriesAmount = new JLabel("1774", SwingConstants.RIGHT);
+        caloriesAmount.setFont(new Font("Inter", Font.BOLD, 25));
+        addComponent(nutritionFactsPanel, caloriesAmount, nutritionFactsGbc, 
+        1, 3, 1, 1, GridBagConstraints.CENTER);
+
+        JLabel dailyValue = new JLabel("% Daily Value*", SwingConstants.RIGHT);
+        dailyValue.setFont(new Font("Inter", Font.BOLD, 12));
+        addComponent(nutritionFactsPanel, dailyValue, nutritionFactsGbc, 
+        1, 4, 1, 1, GridBagConstraints.CENTER);
+
         nutritionAnalyzer.add(analyzeRecipePanel);
-        // nutritionAnalyzer.add(nutritionFactsPanel);
+        nutritionAnalyzer.add(nutritionFactsPanel);
 
         addComponent(mainPanel, nutritionAnalyzer, mainGbc, 
         0, 0, 1, 1, GridBagConstraints.CENTER);
@@ -278,6 +315,10 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 JOptionPane.showMessageDialog(mainPanel, "Nothing is selected.");
             }
         } 
+        else if (command == "Clear Ingredients List") {
+            // Remove all items in the ingredients list
+            ingrListModel.clear();
+        } 
         else if (command == "Analyze Recipe") {
             // Alerts the user if the ingredients list is empty
             int ingrNum = ingrListModel.getSize();
@@ -321,6 +362,16 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
     // Handle changes in the selection of items in a JList
     public void valueChanged(ListSelectionEvent e) {
+        int ingrNum = ingrListModel.getSize();
+        // Disables the 'Clear' button if there are no items in the list
+        if (ingrNum == 0) {
+            clearIngrListBtn.setEnabled(false);
+        } 
+        // Otherwise, enables it
+        else {
+            clearIngrListBtn.setEnabled(true);
+        }
+
         if (!e.getValueIsAdjusting()) {
             // Determines which JList triggered the event
             JList<?> sourceList = (JList<?>) e.getSource();
@@ -331,9 +382,12 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 // String selectedValue = ingrList.getSelectedValue().toString();
 
                 int selectedIndex = ingrList.getSelectedIndex();
+                // Enables the 'Remove' button if there are items in the list
                 if (selectedIndex != -1) {
                     removeIngrBtn.setEnabled(true);
-                } else {
+                } 
+                // Otherwise, disables it
+                else {
                     removeIngrBtn.setEnabled(false);
                 }
             }
