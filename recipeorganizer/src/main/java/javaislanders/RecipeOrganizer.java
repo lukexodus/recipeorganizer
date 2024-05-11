@@ -2,13 +2,19 @@ package javaislanders;
 
 // Built-in Classes
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.lang.reflect.Type;
 
 // 3rd-Party (Downloaded) Classes
 import com.google.gson.Gson;
@@ -16,6 +22,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 // Local Classes
 import javaislanders.components.NutritionFacts;
@@ -31,6 +38,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     // Global Data
     private HashSet<String> recipeGroups = new HashSet<>();
     private HashSet<String> recipeTitles = new HashSet<>();
+    private ArrayList<Recipe> recipeItems = null;
 
     // Main Panel
     JPanel mainPanel;
@@ -67,17 +75,16 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
 
 
-        // [Create DB file if it does not exist]
+        // [Create DB file (json) if it does not exist]
         File dbFile = new File(dbFileName);
         try {
-            // Check if the file exists
+            // Check if the json file exists
             if (!dbFile.exists()) {
-                // Create a new file
+                // Create the json file
                 boolean created = dbFile.createNewFile();
                 if (created) {
-                    // Add empty list to the file
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(dbFile))) {
-                        // Write data to the file
+                        // Add empty list to the file
                         writer.write("[]");
                     } catch (IOException e) {
                         System.out.println("An error occurred while writing to the file: " + e.getMessage());
@@ -97,7 +104,23 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
 
         // [Load DB Data]
-        // TODO
+        try {
+            Gson gson = new Gson();
+            // Type recipeListType  = new TypeToken<ArrayList<Recipe>>(){}.getType();
+
+            // Load the JSON file
+            String json = new String(Files.readAllBytes(Paths.get(dbFileName)));
+
+            // Deserialize the JSON array into a List<String>
+            // ArrayList<Recipe> recipeItemsArray = gson.fromJson(json, recipeListType);
+            // recipeItems = recipeItemsArray;
+
+            Recipe[] recipeItemsArray = gson.fromJson(json, Recipe[].class);
+            List<Recipe> tempList = Arrays.asList(recipeItemsArray);
+            recipeItems = new ArrayList<>(tempList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
