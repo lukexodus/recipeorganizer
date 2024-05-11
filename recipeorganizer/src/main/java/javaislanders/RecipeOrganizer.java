@@ -1,5 +1,6 @@
 package javaislanders;
 
+// Built-in Classes
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,12 +8,16 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.text.NumberFormat;
 
+// 3rd-Party (Downloaded) Classes
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+// Local Classes
 import javaislanders.components.NutritionFacts;
+import javaislanders.components.LabelInfo;
+import javaislanders.components.TypeInfo;
 import javaislanders.types.Recipe;
 
 public class RecipeOrganizer extends JFrame implements ActionListener, ListSelectionListener {
@@ -46,7 +51,8 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("JavaIslanders: Recipe Organizer");
         this.setResizable(true);
-        this.setSize(1500, 800);
+        this.setSize(1900, 1000);
+        // this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setMinimumSize(new Dimension(1100, 900));
         this.setVisible(true);
         this.setLayout(new BorderLayout());
@@ -76,6 +82,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
         // [Load DB Data]
         // TODO
+
 
 
         // --------------------------------------------------------------
@@ -251,9 +258,25 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
         NutritionFacts nutritionFactsPanel = new NutritionFacts(currentRecipe);
 
+        // -------------------------------------
+        // --      Label Info panel      --
+        // -------------------------------------
+
+        LabelInfo labelInfoPanel = new LabelInfo(currentRecipe);
+
+        // -------------------------------------
+        // --      Type Info Facts panel      --
+        // -------------------------------------
+
+        TypeInfo typeInfoPanel = new TypeInfo(currentRecipe);
+
         nutritionAnalyzer.add(analyzeRecipePanel);
         // Adds the initial NutritionFacts panel (has no data) (for placeholder purposes)
         nutritionAnalyzer.add(nutritionFactsPanel);
+
+        nutritionAnalyzer.add(labelInfoPanel);
+
+        nutritionAnalyzer.add(typeInfoPanel);
 
         addComponent(mainPanel, nutritionAnalyzer, mainGbc, 
         0, 0, 1, 1, GridBagConstraints.CENTER);
@@ -381,18 +404,24 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                     JOptionPane.showMessageDialog(mainPanel, "Invalid recipe.\nPlease check the spelling of the ingredients and then try again.");
                 }
 
-                // Updates the NutritionFacts panel.
-                // Removes the previous NutritionFacts panel
-                // and then adds the updated one.
+                // Updates the NutritionFacts, LabelInfo, and TypeInfo panels.
+                // Removes the previous panels
+                // and then adds the updated ones.
                 Component[] components = nutritionAnalyzer.getComponents();
                 if (components.length > 0) {
-                    Component lastComponent = components[components.length - 1];
-                    nutritionAnalyzer.remove(lastComponent);
-                    nutritionAnalyzer.revalidate();
-                    nutritionAnalyzer.repaint();
+                    nutritionAnalyzer.remove(components[components.length - 1]);
+                    nutritionAnalyzer.remove(components[components.length - 2]);
+                    nutritionAnalyzer.remove(components[components.length - 3]);
                 }
                 NutritionFacts nutritionFactsPanel = new NutritionFacts(currentRecipe);
                 nutritionAnalyzer.add(nutritionFactsPanel);
+
+                LabelInfo labelInfoPanel = new LabelInfo(currentRecipe);
+                nutritionAnalyzer.add(labelInfoPanel);
+
+                TypeInfo healthInfoPanel = new TypeInfo(currentRecipe);
+                nutritionAnalyzer.add(healthInfoPanel);
+
                 nutritionAnalyzer.revalidate();
                 nutritionAnalyzer.repaint();
             }
