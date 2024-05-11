@@ -7,11 +7,14 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.text.NumberFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 // 3rd-Party (Downloaded) Classes
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
 // Local Classes
@@ -24,6 +27,10 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     // Global Variables
     private APIConnectionInterface connection;
     private String dbFileName = "recipe-organizer-database.json";
+
+    // Global Data
+    private HashSet<String> recipeGroups = new HashSet<>();
+    private HashSet<String> recipeTitles = new HashSet<>();
 
     // Main Panel
     JPanel mainPanel;
@@ -369,23 +376,14 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             try {
                 // Disables the button to prevent potential problems
                 analyzeRecipeBtn.setEnabled(false);
-                // Alerts the user that the program is currently sending
-                // // i.e. program is unusable at this point
-                // Thread dialogThread = new Thread(new Runnable() {
-                //     @Override
-                //     public void run() {
-                //         // Display the dialog
-                //         JOptionPane.showMessageDialog(null, "Analyzing recipe...", "Alert", JOptionPane.PLAIN_MESSAGE);
-                //     }
-                // });
-                // dialogThread.start();
+
                 // Sends the request to the API
                 String response = analyzeIngredients(payload);
 
                 // Parses the response to a JsonObject
-                // JsonElement nutritionElement = JsonParser.parseString(response);
-                // JsonObject nutritionJson = nutritionElement.getAsJsonObject();
-                // currentNutritionObject = nutritionJson;
+                JsonElement nutritionElement = JsonParser.parseString(response);
+                JsonObject nutritionJson = nutritionElement.getAsJsonObject();
+                currentNutritionObject = nutritionJson;
 
                 Gson gson = new Gson();
                 Recipe recipe = gson.fromJson(response, Recipe.class);
@@ -433,6 +431,18 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 JOptionPane.showMessageDialog(mainPanel, "Ingredients list is empty.");
                 return;
             }
+
+            String recipeTitle = null;
+            do {
+                recipeTitle = JOptionPane.showInputDialog(null, "Enter Recipe Title: ", "Input Dialog", JOptionPane.QUESTION_MESSAGE);
+
+                if (recipeTitle != null && recipeTitles.contains(recipeTitle)) {
+                    JOptionPane.showMessageDialog(mainPanel, "Title is already used. Please create a new one.");
+                    continue;
+                }
+            } while (recipeTitle == null);
+
+            recipeTitles.add(recipeTitle);
         }
     }
 
