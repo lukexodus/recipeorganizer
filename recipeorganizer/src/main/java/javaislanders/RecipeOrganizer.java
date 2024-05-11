@@ -86,7 +86,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         this.add(header, BorderLayout.NORTH);
 
         // --------------------------------------------------------------
-        // --                        MAIN PANEL                        --
+        // --                       MAIN PANEL                         --
         // --------------------------------------------------------------
         // Contains the 3 features:
         // - Nutrition Analysis
@@ -245,7 +245,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         // --      Nutrition Facts panel      --
         // -------------------------------------
 
-        NutritionFacts nutritionFactsPanel = new NutritionFacts(null);
+        NutritionFacts nutritionFactsPanel = new NutritionFacts(currentRecipe);
 
         nutritionAnalyzer.add(analyzeRecipePanel);
         // Adds the initial NutritionFacts panel (has no data) (for placeholder purposes)
@@ -363,9 +363,6 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 Gson gson = new Gson();
                 Recipe recipe = gson.fromJson(response, Recipe.class);
                 currentRecipe = recipe;
-
-                // Closes the 'Analyzing recipe...' dialog
-                // closeAlertDialog();
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(mainPanel, "Error sending request to the API.\n" + exception.getLocalizedMessage());
                 currentNutritionObject = null;
@@ -377,7 +374,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 // If it doesn't, it may be that the recipe inputted by the user
                 // is not valid.
                 if (currentRecipe.getCalories() == 0) {
-                    JOptionPane.showMessageDialog(mainPanel, "Invalid recipe.");
+                    JOptionPane.showMessageDialog(mainPanel, "Invalid recipe.\nPlease check the spelling of the ingredients and then try again.");
                 }
 
                 // Updates the NutritionFacts panel.
@@ -439,20 +436,5 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         gbc.gridheight = gridheight;
         gbc.anchor = anchor;
         container.add(component, gbc);
-    }
-
-
-    private static void closeAlertDialog() {
-        // Close the dialog programmatically
-        Window[] windows = Window.getWindows();
-        for (Window window : windows) {
-            if (window instanceof JDialog) {
-                JDialog dialog = (JDialog) window;
-                if (dialog.getTitle().equals("Alert")) {
-                    dialog.dispose(); // Close the dialog
-                    break;
-                }
-            }
-        }
     }
 }
