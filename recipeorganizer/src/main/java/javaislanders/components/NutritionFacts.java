@@ -1,8 +1,10 @@
-package javaislanders;
+package javaislanders.components;
 
 import java.awt.*;
-
 import javax.swing.*;
+
+import javaislanders.types.Nutrient;
+import javaislanders.types.Recipe;
 
 public class NutritionFacts extends JScrollPane {
     public NutritionFacts(Recipe recipe) {

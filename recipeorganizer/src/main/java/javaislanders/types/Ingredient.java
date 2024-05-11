@@ -1,6 +1,8 @@
-package javaislanders;
+package javaislanders.types;
 
 import java.util.List;
+
+import javaislanders.types.ParsedIngredient;
 
 public class Ingredient {
     private String text;

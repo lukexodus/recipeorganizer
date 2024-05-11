@@ -12,12 +12,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import javaislanders.components.NutritionFacts;
+import javaislanders.types.Recipe;
+
 public class RecipeOrganizer extends JFrame implements ActionListener, ListSelectionListener {
     // Global Variables
     private APIConnectionInterface connection;
     private String dbFileName = "recipe-organizer-database.json";
 
-    // 
+    // Main Panel
     JPanel mainPanel;
 
     // Nutrition Analysis
@@ -72,6 +75,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
 
         // [Load DB Data]
+        // TODO
 
 
         // --------------------------------------------------------------

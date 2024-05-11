@@ -1,4 +1,4 @@
-package javaislanders;
+package javaislanders.types;
 
 public class Nutrient {
     private String label;
