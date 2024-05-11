@@ -132,7 +132,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         // --------------------------------------------------------------
         // --                       Header Panel                       --
         // --------------------------------------------------------------
-
+ 
         JPanel header = new JPanel(new BorderLayout());
         JLabel headerTitle = new JLabel("Recipe Organizer", SwingConstants.CENTER);
         headerTitle.setFont(new Font("Inter", Font.BOLD, 32));

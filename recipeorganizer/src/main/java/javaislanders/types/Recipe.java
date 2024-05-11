@@ -1,5 +1,6 @@
 package javaislanders.types;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,10 @@ public class Recipe {
         // Default constructor
     }
 
-    public Recipe(String uri, double yield, int calories, double totalCO2Emissions, String co2EmissionsClass, double totalWeight, List<String> dietLabels, List<String> healthLabels, List<String> cautions, Map<String, Nutrient> totalNutrients, Map<String, Nutrient> totalDaily, List<Ingredient> ingredients, List<String> cuisineType, List<String> mealType, List<String> dishType, Map<String, Nutrient> totalNutrientsKCal) {
+    public Recipe(String uri, String title, String group, double yield, int calories, double totalCO2Emissions, String co2EmissionsClass, double totalWeight, List<String> dietLabels, List<String> healthLabels, List<String> cautions, Map<String, Nutrient> totalNutrients, Map<String, Nutrient> totalDaily, List<Ingredient> ingredients, List<String> cuisineType, List<String> mealType, List<String> dishType, Map<String, Nutrient> totalNutrientsKCal) {
         this.uri = uri;
+        this.title = title;
+        this.group = group;
         this.yield = yield;
         this.calories = calories;
         this.totalCO2Emissions = totalCO2Emissions;
@@ -189,5 +192,60 @@ public class Recipe {
 
     public void setTotalNutrientsKCal(Map<String, Nutrient> totalNutrientsKCal) {
         this.totalNutrientsKCal = totalNutrientsKCal;
+    }
+
+    // Method to check if a recipe matches all criteria
+    public boolean matchesCriteria(String[] dietLabels, String[] healthLabels, String[] cuisineType, String[] mealType, String[] dishType) {
+        // Check if all diet labels are present in the recipe
+        if (!checkLabels(dietLabels, this.dietLabels)) {
+            return false;
+        }
+
+        // Check if all health labels are present in the recipe
+        if (!checkLabels(healthLabels, this.healthLabels)) {
+            return false;
+        }
+
+        // Check if all cuisine types are present in the recipe
+        if (!checkLabels(cuisineType, this.cuisineType)) {
+            return false;
+        }
+
+        // Check if all meal types are present in the recipe
+        if (!checkLabels(mealType, this.mealType)) {
+            return false;
+        }
+
+        // Check if all dish types are present in the recipe
+        if (!checkLabels(dishType, this.dishType)) {
+            return false;
+        }
+
+        // If all criteria match, return true
+        return true;
+    }
+
+    // Helper method to check if all labels are present in the recipe
+    private boolean checkLabels(String[] labels, List<String> recipeLabels) {
+        if (labels.length == 0) {
+            return true; // No labels to match, so return true
+        }
+        for (String label : labels) {
+            if (!recipeLabels.contains(label)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Method to find recipes matching the specified criteria in the list
+    public static List<Recipe> findRecipesByCriteria(List<Recipe> recipes, String[] dietLabels, String[] healthLabels, String[] cuisineType, String[] mealType, String[] dishType) {
+        List<Recipe> matchedRecipes = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            if (recipe.matchesCriteria(dietLabels, healthLabels, cuisineType, mealType, dishType)) {
+                matchedRecipes.add(recipe);
+            }
+        }
+        return matchedRecipes;
     }
 }
