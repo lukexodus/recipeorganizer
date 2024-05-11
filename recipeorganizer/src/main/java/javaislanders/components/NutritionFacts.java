@@ -64,230 +64,265 @@ public class NutritionFacts extends JScrollPane {
             addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
             0, ++gridY, 2, 1, GridBagConstraints.CENTER);
 
-            JPanel FAT = new JPanel();
-            FAT.setLayout(new BoxLayout(FAT, BoxLayout.X_AXIS));
             Nutrient FATNutrient = recipe.getTotalNutrients().get("FAT");
-            JLabel FATAmount = new JLabel("Total Fat " + String.format("%.2f", FATNutrient.getQuantity()) + " " + FATNutrient.getUnit());
-            FATAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel FATDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("FAT").getQuantity()) + " %");
-            FATDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            FAT.add(FATAmount);
-            FAT.add(Box.createHorizontalGlue());
-            FAT.add(FATDaily);
-            addComponent(nutritionFactsPanel, FAT, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (FATNutrient != null) {
+                JPanel FAT = new JPanel();
+                FAT.setLayout(new BoxLayout(FAT, BoxLayout.X_AXIS));
+                JLabel FATAmount = new JLabel("Total Fat " + String.format("%.2f", FATNutrient.getQuantity()) + " " + FATNutrient.getUnit());
+                FATAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel FATDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("FAT").getQuantity()) + " %");
+                FATDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                FAT.add(FATAmount);
+                FAT.add(Box.createHorizontalGlue());
+                FAT.add(FATDaily);
+                addComponent(nutritionFactsPanel, FAT, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel FASAT = new JPanel();
-            FASAT.setLayout(new BoxLayout(FASAT, BoxLayout.X_AXIS));
             Nutrient FASATNutrient = recipe.getTotalNutrients().get("FASAT");
-            JLabel FASATAmount = new JLabel("    Saturated Fat " + String.format("%.2f", FASATNutrient.getQuantity()) + " " + FASATNutrient.getUnit());
-            FASATAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel FASATDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("FASAT").getQuantity()) + " %");
-            FASATDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            FASAT.add(FASATAmount);
-            FASAT.add(Box.createHorizontalGlue());
-            FASAT.add(FASATDaily);
-            addComponent(nutritionFactsPanel, FASAT, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (FASATNutrient != null) {
+                JPanel FASAT = new JPanel();
+                FASAT.setLayout(new BoxLayout(FASAT, BoxLayout.X_AXIS));
+                JLabel FASATAmount = new JLabel("    Saturated Fat " + String.format("%.2f", FASATNutrient.getQuantity()) + " " + FASATNutrient.getUnit());
+                FASATAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel FASATDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("FASAT").getQuantity()) + " %");
+                FASATDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                FASAT.add(FASATAmount);
+                FASAT.add(Box.createHorizontalGlue());
+                FASAT.add(FASATDaily);
+                addComponent(nutritionFactsPanel, FASAT, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel FATRN = new JPanel();
-            FATRN.setLayout(new BoxLayout(FATRN, BoxLayout.X_AXIS));
             Nutrient FATRNNutrient = recipe.getTotalNutrients().get("FATRN");
-            JLabel FATRNAmount = new JLabel("    Trans Fat " + String.format("%.2f", FATRNNutrient.getQuantity()) + " " + FATRNNutrient.getUnit());
-            FATRNAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            FATRN.add(FATRNAmount);
-            addComponent(nutritionFactsPanel, FATRN, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (FATRNNutrient != null) {
+                JPanel FATRN = new JPanel();
+                FATRN.setLayout(new BoxLayout(FATRN, BoxLayout.X_AXIS));
+                JLabel FATRNAmount = new JLabel("    Trans Fat " + String.format("%.2f", FATRNNutrient.getQuantity()) + " " + FATRNNutrient.getUnit());
+                FATRNAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                FATRN.add(FATRNAmount);
+                addComponent(nutritionFactsPanel, FATRN, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel CHOLE = new JPanel();
-            CHOLE.setLayout(new BoxLayout(CHOLE, BoxLayout.X_AXIS));
+                
             Nutrient CHOLENutrient = recipe.getTotalNutrients().get("CHOLE");
-            JLabel CHOLEAmount = new JLabel("Cholesterol " + String.format("%.2f", CHOLENutrient.getQuantity()) + " " + CHOLENutrient.getUnit());
-            CHOLEAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel CHOLEDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("CHOLE").getQuantity()) + " %");
-            CHOLEDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            CHOLE.add(CHOLEAmount);
-            CHOLE.add(Box.createHorizontalGlue());
-            CHOLE.add(CHOLEDaily);
-            addComponent(nutritionFactsPanel, CHOLE, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (CHOLENutrient != null) {
+                JPanel CHOLE = new JPanel();
+                CHOLE.setLayout(new BoxLayout(CHOLE, BoxLayout.X_AXIS));
+                JLabel CHOLEAmount = new JLabel("Cholesterol " + String.format("%.2f", CHOLENutrient.getQuantity()) + " " + CHOLENutrient.getUnit());
+                CHOLEAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel CHOLEDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("CHOLE").getQuantity()) + " %");
+                CHOLEDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                CHOLE.add(CHOLEAmount);
+                CHOLE.add(Box.createHorizontalGlue());
+                CHOLE.add(CHOLEDaily);
+                addComponent(nutritionFactsPanel, CHOLE, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel NA = new JPanel();
-            NA.setLayout(new BoxLayout(NA, BoxLayout.X_AXIS));
             Nutrient NANutrient = recipe.getTotalNutrients().get("NA");
-            JLabel NAAmount = new JLabel("Sodium " + String.format("%.2f", NANutrient.getQuantity()) + " " + NANutrient.getUnit());
-            NAAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel NADaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("NA").getQuantity()) + " %");
-            NADaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            NA.add(NAAmount);
-            NA.add(Box.createHorizontalGlue());
-            NA.add(NADaily);
-            addComponent(nutritionFactsPanel, NA, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (NANutrient != null) {
+                JPanel NA = new JPanel();
+                NA.setLayout(new BoxLayout(NA, BoxLayout.X_AXIS));
+                JLabel NAAmount = new JLabel("Sodium " + String.format("%.2f", NANutrient.getQuantity()) + " " + NANutrient.getUnit());
+                NAAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel NADaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("NA").getQuantity()) + " %");
+                NADaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                NA.add(NAAmount);
+                NA.add(Box.createHorizontalGlue());
+                NA.add(NADaily);
+                addComponent(nutritionFactsPanel, NA, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel CHOCDF = new JPanel();
-            CHOCDF.setLayout(new BoxLayout(CHOCDF, BoxLayout.X_AXIS));
             Nutrient CHOCDFNutrient = recipe.getTotalNutrients().get("CHOCDF");
-            JLabel CHOCDFAmount = new JLabel("Total Carbohydrate " + String.format("%.2f", CHOCDFNutrient.getQuantity()) + " " + CHOCDFNutrient.getUnit());
-            CHOCDFAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel CHOCDFDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("CHOCDF").getQuantity()) + " %");
-            CHOCDFDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            CHOCDF.add(CHOCDFAmount);
-            CHOCDF.add(Box.createHorizontalGlue());
-            CHOCDF.add(CHOCDFDaily);
-            addComponent(nutritionFactsPanel, CHOCDF, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (CHOCDFNutrient != null) {
+                JPanel CHOCDF = new JPanel();
+                CHOCDF.setLayout(new BoxLayout(CHOCDF, BoxLayout.X_AXIS));
+                JLabel CHOCDFAmount = new JLabel("Total Carbohydrate " + String.format("%.2f", CHOCDFNutrient.getQuantity()) + " " + CHOCDFNutrient.getUnit());
+                CHOCDFAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel CHOCDFDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("CHOCDF").getQuantity()) + " %");
+                CHOCDFDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                CHOCDF.add(CHOCDFAmount);
+                CHOCDF.add(Box.createHorizontalGlue());
+                CHOCDF.add(CHOCDFDaily);
+                addComponent(nutritionFactsPanel, CHOCDF, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel FIBTG = new JPanel();
-            FIBTG.setLayout(new BoxLayout(FIBTG, BoxLayout.X_AXIS));
             Nutrient FIBTGNutrient = recipe.getTotalNutrients().get("FIBTG");
-            JLabel FIBTGAmount = new JLabel("    Dietary Fiber " + String.format("%.2f", FIBTGNutrient.getQuantity()) + " " + FIBTGNutrient.getUnit());
-            FIBTGAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            FIBTG.add(FIBTGAmount);
-            addComponent(nutritionFactsPanel, FIBTG, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (FIBTGNutrient != null) {
+                JPanel FIBTG = new JPanel();
+                FIBTG.setLayout(new BoxLayout(FIBTG, BoxLayout.X_AXIS));
+                JLabel FIBTGAmount = new JLabel("    Dietary Fiber " + String.format("%.2f", FIBTGNutrient.getQuantity()) + " " + FIBTGNutrient.getUnit());
+                FIBTGAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                FIBTG.add(FIBTGAmount);
+                addComponent(nutritionFactsPanel, FIBTG, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel SUGAR = new JPanel();
-            SUGAR.setLayout(new BoxLayout(SUGAR, BoxLayout.X_AXIS));
+                
             Nutrient SUGARNutrient = recipe.getTotalNutrients().get("SUGAR");
-            JLabel SUGARAmount = new JLabel("    Total Sugars " + String.format("%.2f", SUGARNutrient.getQuantity()) + " " + SUGARNutrient.getUnit());
-            SUGARAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            SUGAR.add(SUGARAmount);
-            addComponent(nutritionFactsPanel, SUGAR, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (SUGARNutrient != null) {
+                JPanel SUGAR = new JPanel();
+                SUGAR.setLayout(new BoxLayout(SUGAR, BoxLayout.X_AXIS));
+                JLabel SUGARAmount = new JLabel("    Total Sugars " + String.format("%.2f", SUGARNutrient.getQuantity()) + " " + SUGARNutrient.getUnit());
+                SUGARAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                SUGAR.add(SUGARAmount);
+                addComponent(nutritionFactsPanel, SUGAR, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
-            
-            JPanel PROCNT = new JPanel();
-            PROCNT.setLayout(new BoxLayout(PROCNT, BoxLayout.X_AXIS));
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
+
+                            
             Nutrient PROCNTNutrient = recipe.getTotalNutrients().get("PROCNT");
-            JLabel PROCNTAmount = new JLabel("Protein " + String.format("%.2f", PROCNTNutrient.getQuantity()) + " " + PROCNTNutrient.getUnit());
-            PROCNTAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel PROCNTDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("PROCNT").getQuantity()) + " %");
-            PROCNTDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            PROCNT.add(PROCNTAmount);
-            PROCNT.add(Box.createHorizontalGlue());
-            PROCNT.add(PROCNTDaily);
-            addComponent(nutritionFactsPanel, PROCNT, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (PROCNTNutrient != null) {
+                JPanel PROCNT = new JPanel();
+                PROCNT.setLayout(new BoxLayout(PROCNT, BoxLayout.X_AXIS));
+                JLabel PROCNTAmount = new JLabel("Protein " + String.format("%.2f", PROCNTNutrient.getQuantity()) + " " + PROCNTNutrient.getUnit());
+                PROCNTAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel PROCNTDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("PROCNT").getQuantity()) + " %");
+                PROCNTDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                PROCNT.add(PROCNTAmount);
+                PROCNT.add(Box.createHorizontalGlue());
+                PROCNT.add(PROCNTDaily);
+                addComponent(nutritionFactsPanel, PROCNT, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
             
-            JPanel VITA_RAE = new JPanel();
-            VITA_RAE.setLayout(new BoxLayout(VITA_RAE, BoxLayout.X_AXIS));
             Nutrient VITA_RAENutrient = recipe.getTotalNutrients().get("VITA_RAE");
-            JLabel VITA_RAEAmount = new JLabel("Vitamin A " + String.format("%.2f", VITA_RAENutrient.getQuantity()) + " " + VITA_RAENutrient.getUnit());
-            VITA_RAEAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel VITA_RAEDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("VITA_RAE").getQuantity()) + " %");
-            VITA_RAEDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            VITA_RAE.add(VITA_RAEAmount);
-            VITA_RAE.add(Box.createHorizontalGlue());
-            VITA_RAE.add(VITA_RAEDaily);
-            addComponent(nutritionFactsPanel, VITA_RAE, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (VITA_RAENutrient != null) {
+                JPanel VITA_RAE = new JPanel();
+                VITA_RAE.setLayout(new BoxLayout(VITA_RAE, BoxLayout.X_AXIS));
+                JLabel VITA_RAEAmount = new JLabel("Vitamin A " + String.format("%.2f", VITA_RAENutrient.getQuantity()) + " " + VITA_RAENutrient.getUnit());
+                VITA_RAEAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel VITA_RAEDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("VITA_RAE").getQuantity()) + " %");
+                VITA_RAEDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                VITA_RAE.add(VITA_RAEAmount);
+                VITA_RAE.add(Box.createHorizontalGlue());
+                VITA_RAE.add(VITA_RAEDaily);
+                addComponent(nutritionFactsPanel, VITA_RAE, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel VITC = new JPanel();
-            VITC.setLayout(new BoxLayout(VITC, BoxLayout.X_AXIS));
             Nutrient VITCNutrient = recipe.getTotalNutrients().get("VITC");
-            JLabel VITCAmount = new JLabel("Vitamin C " + String.format("%.2f", VITCNutrient.getQuantity()) + " " + VITCNutrient.getUnit());
-            VITCAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel VITCDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("VITC").getQuantity()) + " %");
-            VITCDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            VITC.add(VITCAmount);
-            VITC.add(Box.createHorizontalGlue());
-            VITC.add(VITCDaily);
-            addComponent(nutritionFactsPanel, VITC, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (VITCNutrient != null) {
+                JPanel VITC = new JPanel();
+                VITC.setLayout(new BoxLayout(VITC, BoxLayout.X_AXIS));
+                JLabel VITCAmount = new JLabel("Vitamin C " + String.format("%.2f", VITCNutrient.getQuantity()) + " " + VITCNutrient.getUnit());
+                VITCAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel VITCDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("VITC").getQuantity()) + " %");
+                VITCDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                VITC.add(VITCAmount);
+                VITC.add(Box.createHorizontalGlue());
+                VITC.add(VITCDaily);
+                addComponent(nutritionFactsPanel, VITC, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel VITD = new JPanel();
-            VITD.setLayout(new BoxLayout(VITD, BoxLayout.X_AXIS));
             Nutrient VITDNutrient = recipe.getTotalNutrients().get("VITD");
-            JLabel VITDAmount = new JLabel("Vitamin D " + String.format("%.2f", VITDNutrient.getQuantity()) + " " + VITDNutrient.getUnit());
-            VITDAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel VITDDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("VITD").getQuantity()) + " %");
-            VITDDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            VITD.add(VITDAmount);
-            VITD.add(Box.createHorizontalGlue());
-            VITD.add(VITDDaily);
-            addComponent(nutritionFactsPanel, VITD, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (VITDNutrient != null) {
+                JPanel VITD = new JPanel();
+                VITD.setLayout(new BoxLayout(VITD, BoxLayout.X_AXIS));
+                JLabel VITDAmount = new JLabel("Vitamin D " + String.format("%.2f", VITDNutrient.getQuantity()) + " " + VITDNutrient.getUnit());
+                VITDAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel VITDDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("VITD").getQuantity()) + " %");
+                VITDDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                VITD.add(VITDAmount);
+                VITD.add(Box.createHorizontalGlue());
+                VITD.add(VITDDaily);
+                addComponent(nutritionFactsPanel, VITD, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel CA = new JPanel();
-            CA.setLayout(new BoxLayout(CA, BoxLayout.X_AXIS));
+
             Nutrient CANutrient = recipe.getTotalNutrients().get("CA");
-            JLabel CAAmount = new JLabel("Calcium " + String.format("%.2f", CANutrient.getQuantity()) + " " + CANutrient.getUnit());
-            CAAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel CADaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("CA").getQuantity()) + " %");
-            CADaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            CA.add(CAAmount);
-            CA.add(Box.createHorizontalGlue());
-            CA.add(CADaily);
-            addComponent(nutritionFactsPanel, CA, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (CANutrient != null) {
+                JPanel CA = new JPanel();
+                CA.setLayout(new BoxLayout(CA, BoxLayout.X_AXIS));
+                JLabel CAAmount = new JLabel("Calcium " + String.format("%.2f", CANutrient.getQuantity()) + " " + CANutrient.getUnit());
+                CAAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel CADaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("CA").getQuantity()) + " %");
+                CADaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                CA.add(CAAmount);
+                CA.add(Box.createHorizontalGlue());
+                CA.add(CADaily);
+                addComponent(nutritionFactsPanel, CA, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel FE = new JPanel();
-            FE.setLayout(new BoxLayout(FE, BoxLayout.X_AXIS));
             Nutrient FENutrient = recipe.getTotalNutrients().get("FE");
-            JLabel FEAmount = new JLabel("Iron " + String.format("%.2f", FENutrient.getQuantity()) + " " + FENutrient.getUnit());
-            FEAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel FEDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("FE").getQuantity()) + " %");
-            FEDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            FE.add(FEAmount);
-            FE.add(Box.createHorizontalGlue());
-            FE.add(FEDaily);
-            addComponent(nutritionFactsPanel, FE, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (FENutrient != null) {
+                JPanel FE = new JPanel();
+                FE.setLayout(new BoxLayout(FE, BoxLayout.X_AXIS));
+                JLabel FEAmount = new JLabel("Iron " + String.format("%.2f", FENutrient.getQuantity()) + " " + FENutrient.getUnit());
+                FEAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel FEDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("FE").getQuantity()) + " %");
+                FEDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                FE.add(FEAmount);
+                FE.add(Box.createHorizontalGlue());
+                FE.add(FEDaily);
+                addComponent(nutritionFactsPanel, FE, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
 
-            addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+                addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER);
+            }
 
-            JPanel K = new JPanel();
-            K.setLayout(new BoxLayout(K, BoxLayout.X_AXIS));
             Nutrient KNutrient = recipe.getTotalNutrients().get("K");
-            JLabel KAmount = new JLabel("Potassium " + String.format("%.2f", KNutrient.getQuantity()) + " " + KNutrient.getUnit());
-            KAmount.setFont(new Font("Inter", Font.PLAIN, 12));
-            JLabel KDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("K").getQuantity()) + " %");
-            KDaily.setFont(new Font("Inter", Font.PLAIN, 12));
-            K.add(KAmount);
-            K.add(Box.createHorizontalGlue());
-            K.add(KDaily);
-            addComponent(nutritionFactsPanel, K, nutritionFactsGbc, 
-            0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            if (KNutrient != null) {
+                JPanel K = new JPanel();
+                K.setLayout(new BoxLayout(K, BoxLayout.X_AXIS));
+                JLabel KAmount = new JLabel("Potassium " + String.format("%.2f", KNutrient.getQuantity()) + " " + KNutrient.getUnit());
+                KAmount.setFont(new Font("Inter", Font.PLAIN, 12));
+                JLabel KDaily = new JLabel(String.valueOf((int) recipe.getTotalDaily().get("K").getQuantity()) + " %");
+                KDaily.setFont(new Font("Inter", Font.PLAIN, 12));
+                K.add(KAmount);
+                K.add(Box.createHorizontalGlue());
+                K.add(KDaily);
+
+                addComponent(nutritionFactsPanel, K, nutritionFactsGbc, 
+                0, ++gridY, 2, 1, GridBagConstraints.CENTER); 
+            }
 
             // addComponent(nutritionFactsPanel, new JSeparator(), nutritionFactsGbc, 
             // 0, ++gridY, 2, 1, GridBagConstraints.CENTER);

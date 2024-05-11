@@ -532,7 +532,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
                 if (recipeTitle != null && recipeTitles.contains(recipeTitle)) {
                     JOptionPane.showMessageDialog(mainPanel, "Title is already used. Please create a new one.");
-                    continue;
+                    return;
                 }
             } while (recipeTitle == null);
             recipeTitles.add(recipeTitle);
