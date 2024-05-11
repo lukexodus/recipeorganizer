@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Recipe {
     private String uri;
+    private String title;
     private String group;
     private double yield;
     private int calories;
@@ -52,6 +53,14 @@ public class Recipe {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getGroup() {

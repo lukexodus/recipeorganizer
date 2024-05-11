@@ -1,28 +1,25 @@
 package javaislanders;
 
 // Built-in Classes
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.text.NumberFormat;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
-import java.lang.reflect.Type;
 
 // 3rd-Party (Downloaded) Classes
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 // Local Classes
 import javaislanders.components.NutritionFacts;
@@ -32,13 +29,13 @@ import javaislanders.types.Recipe;
 
 public class RecipeOrganizer extends JFrame implements ActionListener, ListSelectionListener {
     // Global Variables
-    private APIConnectionInterface connection;
-    private String dbFileName = "recipe-organizer-database.json";
+    private APIConnectionInterface connection; // Connection to the edamam.com API
+    final private String dbFileName = "recipe-organizer-database.json"; // Filename of the json file
 
     // Global Data
     private HashSet<String> recipeGroups = new HashSet<>();
     private HashSet<String> recipeTitles = new HashSet<>();
-    private ArrayList<Recipe> recipeItems = null;
+    private ArrayList<Recipe> recipeItems = null;  // This is one stored in the json file
 
     // Main Panel
     JPanel mainPanel;
@@ -53,8 +50,9 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     private JButton removeIngrBtn;
     private JButton clearIngrListBtn;
     private JButton analyzeRecipeBtn;
+    private JButton saveRecipeBtn;
     private Recipe currentRecipe;
-    private JsonObject currentNutritionObject = null;
+    private boolean analyzedCurrentRecipe = false;
 
     public RecipeOrganizer() {
         // [API Connection]
@@ -118,6 +116,13 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             Recipe[] recipeItemsArray = gson.fromJson(json, Recipe[].class);
             List<Recipe> tempList = Arrays.asList(recipeItemsArray);
             recipeItems = new ArrayList<>(tempList);
+
+            for (Recipe recipe : recipeItems) {
+                recipeTitles.add(recipe.getTitle());
+                if (recipe.getGroup() != null) {
+                    recipeGroups.add(recipe.getGroup());
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -284,12 +289,16 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         addComponent(analyzeRecipePanel, analyzeRecipeBtn, analyzeRecipeGbc, 
         0, 11, 2, 1, GridBagConstraints.CENTER);
 
-        // Analyze Recipe Button
-        JButton saveRecipeBtn = new JButton("Save Recipe");
+        // Save Recipe Button
+        saveRecipeBtn = new JButton("Save Recipe");
         saveRecipeBtn.setActionCommand("Save Recipe");
         saveRecipeBtn.addActionListener(this);
         addComponent(analyzeRecipePanel, saveRecipeBtn, analyzeRecipeGbc, 
         0, 12, 2, 1, GridBagConstraints.CENTER);
+        // Button is disabled by default.
+        // User cannot save a recipe without being analyzed.
+        saveRecipeBtn.setEnabled(false);
+
 
         // -------------------------------------
         // --      Nutrition Facts panel      --
@@ -319,7 +328,55 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
         addComponent(mainPanel, nutritionAnalyzer, mainGbc, 
         0, 0, 1, 1, GridBagConstraints.CENTER);
-        
+
+
+        // [Other Event Handlers]
+
+        // Handles the event when the contents of the Ingredients List changes
+        ingrListModel.addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                // Nothing yet
+            }
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {
+                // Nothing yet
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                if (analyzedCurrentRecipe == true) {
+                    analyzedCurrentRecipe = false;
+                }
+            }
+        });
+
+
+
+        // [Operation to be done when the program is closed]
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.out.println("Closing the program...");
+
+                // Stores the `recipeItems` to the json file
+                Gson gson = new GsonBuilder()
+                                .serializeNulls()
+                                .setPrettyPrinting()
+                                .create();
+                String json = gson.toJson(recipeItems);
+                try {
+                    Files.write(Paths.get(dbFileName), json.getBytes());
+                } catch (IOException e1) {
+                    System.out.println("Error writing data to the json file.");
+                    e1.printStackTrace();
+                }
+
+                // Then exit the program
+                System.exit(0);
+            }
+        });
     }
 
     // Sends a request to the API with the ingredients list
@@ -412,17 +469,15 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 // Sends the request to the API
                 String response = analyzeIngredients(payload);
 
-                // Parses the response to a JsonObject
-                JsonElement nutritionElement = JsonParser.parseString(response);
-                JsonObject nutritionJson = nutritionElement.getAsJsonObject();
-                currentNutritionObject = nutritionJson;
 
                 Gson gson = new Gson();
                 Recipe recipe = gson.fromJson(response, Recipe.class);
                 currentRecipe = recipe;
+                analyzedCurrentRecipe = true;
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(mainPanel, "Error sending request to the API.\n" + exception.getLocalizedMessage());
-                currentNutritionObject = null;
+                currentRecipe = null;
+                analyzedCurrentRecipe = false;
             } finally {
                 // Enables back the button
                 analyzeRecipeBtn.setEnabled(true);
@@ -432,6 +487,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 // is not valid.
                 if (currentRecipe.getCalories() == 0) {
                     JOptionPane.showMessageDialog(mainPanel, "Invalid recipe.\nPlease check the spelling of the ingredients and then try again.");
+                    analyzedCurrentRecipe = false;
                 }
 
                 // Updates the NutritionFacts, LabelInfo, and TypeInfo panels.
@@ -464,26 +520,104 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 return;
             }
 
+            // Asks for the title of the recipe
             String recipeTitle = null;
             do {
-                recipeTitle = JOptionPane.showInputDialog(null, "Enter Recipe Title: ", "Input Dialog", JOptionPane.QUESTION_MESSAGE);
+                recipeTitle = JOptionPane.showInputDialog(null, "Enter Recipe Title: ", "Add Title", JOptionPane.QUESTION_MESSAGE);
+
+                // Cancels the save recipe operation if the user closes the dialog
+                if (recipeTitle == null) {
+                    return;
+                }
 
                 if (recipeTitle != null && recipeTitles.contains(recipeTitle)) {
                     JOptionPane.showMessageDialog(mainPanel, "Title is already used. Please create a new one.");
                     continue;
                 }
             } while (recipeTitle == null);
-
             recipeTitles.add(recipeTitle);
+            currentRecipe.setTitle(recipeTitle);
+
+
+            if (recipeGroups.size() > 0) {
+                // Asks if the user would like to add the recipe to a group
+                int choice = JOptionPane.showConfirmDialog(null, "Would you like to add the recipe to a group?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                if (choice == JOptionPane.YES_OPTION) {
+                    // Convert HashSet to an array
+                    String[] groupsArray = recipeGroups.toArray(new String[recipeGroups.size()]);
+
+                    // Asks which group to which the user would like to add
+                    // the recipe
+                    StringBuilder groupsStrBuilder = new StringBuilder();
+                    for (int i = 0; i < recipeGroups.size(); i++) {
+                        groupsStrBuilder.append("[]" + (i + 1) + "] " + groupsArray[i] + "\n");
+                    }
+                    String groupsStr = groupsStrBuilder.toString();
+
+                    int groupIndex;
+
+                    while (true) {
+                        String groupIndexStr = JOptionPane.showInputDialog(null, groupsStr + "\nSelect which group (number) to which the recipe will be added.", "Add To Group", JOptionPane.QUESTION_MESSAGE);
+
+                        // Retries if the user did not input any number
+                        try {
+                            groupIndex = Integer.parseInt(groupIndexStr);
+                        } catch (NumberFormatException exception) {
+                            exception.printStackTrace();
+                            JOptionPane.showMessageDialog(mainPanel, "Invalid input. Please try again.");
+                            continue;
+                        }
+
+                        // Gets the real index
+                        groupIndex--;
+
+                        // Retries if the user inputted a number that is outside
+                        // of the valid range
+                        if (groupIndex <= 0 && groupIndex >= recipeGroups.size()) {
+                            JOptionPane.showMessageDialog(mainPanel, "Invalid input. Please try again.");
+                            continue;
+                        }
+
+                        break;
+                    }
+
+                    currentRecipe.setGroup(groupsArray[groupIndex]);
+                } else if (choice == JOptionPane.NO_OPTION || choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+                    // No group
+                    currentRecipe.setGroup(null);
+                }
+            } else {
+                // No group
+                currentRecipe.setGroup(null);
+            }
+
+            recipeItems.add(currentRecipe);
+
+            // Add/analyze recipe session is finished.
+            // Clears current recipe.
+            currentRecipe = null;
+            ingrListModel.clear();
+            analyzedCurrentRecipe = false;
+        }
+
+        if (command == "Add Ingredient" || command == "Remove Ingredient" || command == "Clear Ingredients List" || command == "Analyze Recipe" || command == "Save Recipe") {
+            // User can only save a recipe (i.e. the 'Save Recipe' button is enabled) 
+            // if the current recipe has been analyzed.
+            if (analyzedCurrentRecipe == true) {
+                saveRecipeBtn.setEnabled(true);
+            } else {
+                saveRecipeBtn.setEnabled(false);
+            }
         }
     }
 
     // Handle changes in the selection of items in a JList
     public void valueChanged(ListSelectionEvent e) {
-        if (!e.getValueIsAdjusting()) {
-            // Determines which JList triggered the event
-            JList<?> sourceList = (JList<?>) e.getSource();
+        // Determines which JList triggered the event
+        JList<?> sourceList = (JList<?>) e.getSource();
 
+        if (!e.getValueIsAdjusting()) {
             // Ingredient List (Analyze Recipe)
             if (sourceList == ingrList) {
                 // Access the selected indices or values from the JList
@@ -513,3 +647,4 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         container.add(component, gbc);
     }
 }
+ 
