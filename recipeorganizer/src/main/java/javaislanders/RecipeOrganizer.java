@@ -75,6 +75,15 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 // Create a new file
                 boolean created = dbFile.createNewFile();
                 if (created) {
+                    // Add empty list to the file
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(dbFile))) {
+                        // Write data to the file
+                        writer.write("[]");
+                    } catch (IOException e) {
+                        System.out.println("An error occurred while writing to the file: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+
                     System.out.println("DB File created successfully.");
                 } else {
                     System.out.println("DB File creation failed.");
