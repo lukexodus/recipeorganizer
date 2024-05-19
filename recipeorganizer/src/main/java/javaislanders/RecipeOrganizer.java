@@ -41,7 +41,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     JPanel mainPanel;
 
     // Nutrition Analysis
-    private JPanel nutritionAnalyzer;
+    private JPanel firstPanel;
     private JList<String> ingrList;
     DefaultListModel<String> ingrListModel;
     private JFormattedTextField quantityTextField;
@@ -141,17 +141,19 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         this.add(header, BorderLayout.NORTH);
 
         // --------------------------------------------------------------
-        // --                       MAIN PANEL                         --
+        // --                       MAIN PANEL                         -- 
         // --------------------------------------------------------------
         // Contains the 3 features:
         // - Nutrition Analysis
         // - Recipe Lists
         // - Recipe Categorization
-
-        mainPanel = new JPanel(new GridBagLayout());
+ 
+        mainPanel  = new JPanel(new GridBagLayout());
         GridBagConstraints mainGbc = new GridBagConstraints();
         mainGbc.fill = GridBagConstraints.VERTICAL;
-        mainGbc.insets = new Insets(15, 15, 15, 15); // Padding
+        // Padding
+        mainGbc.insets = new Insets(15, 15, 15, 15);
+        // Margins
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         JScrollPane mainPanelPane = new JScrollPane(mainPanel);
         mainPanelPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -159,11 +161,12 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
 
         // ----------------------------------------------------
-        // --            Nutrition Analysis Panel            --
+        // --                    1st Panel                   --
         // ----------------------------------------------------
-        // - Contains Nutrition Analyzer panel and Nutrition Facts panel
+        // - Contains Nutrition Analyzer panel, Nutrition Facts panel,
+        //   Labels Info Panel, And Types Info Panel
 
-        nutritionAnalyzer = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
+        firstPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
 
         // -------------------------------------
         // --     Nutrition Analyzer panel    --
@@ -318,15 +321,15 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
         TypeInfo typeInfoPanel = new TypeInfo(currentRecipe);
 
-        nutritionAnalyzer.add(analyzeRecipePanel);
+        firstPanel.add(analyzeRecipePanel);
         // Adds the initial NutritionFacts panel (has no data) (for placeholder purposes)
-        nutritionAnalyzer.add(nutritionFactsPanel);
+        firstPanel.add(nutritionFactsPanel);
 
-        nutritionAnalyzer.add(labelInfoPanel);
+        firstPanel.add(labelInfoPanel);
 
-        nutritionAnalyzer.add(typeInfoPanel);
+        firstPanel.add(typeInfoPanel);
 
-        addComponent(mainPanel, nutritionAnalyzer, mainGbc, 
+        addComponent(mainPanel, firstPanel, mainGbc, 
         0, 0, 1, 1, GridBagConstraints.CENTER);
 
 
@@ -493,23 +496,23 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 // Updates the NutritionFacts, LabelInfo, and TypeInfo panels.
                 // Removes the previous panels
                 // and then adds the updated ones.
-                Component[] components = nutritionAnalyzer.getComponents();
+                Component[] components = firstPanel.getComponents();
                 if (components.length > 0) {
-                    nutritionAnalyzer.remove(components[components.length - 1]);
-                    nutritionAnalyzer.remove(components[components.length - 2]);
-                    nutritionAnalyzer.remove(components[components.length - 3]);
+                    firstPanel.remove(components[components.length - 1]);
+                    firstPanel.remove(components[components.length - 2]);
+                    firstPanel.remove(components[components.length - 3]);
                 }
                 NutritionFacts nutritionFactsPanel = new NutritionFacts(currentRecipe);
-                nutritionAnalyzer.add(nutritionFactsPanel);
+                firstPanel.add(nutritionFactsPanel);
 
                 LabelInfo labelInfoPanel = new LabelInfo(currentRecipe);
-                nutritionAnalyzer.add(labelInfoPanel);
+                firstPanel.add(labelInfoPanel);
 
                 TypeInfo healthInfoPanel = new TypeInfo(currentRecipe);
-                nutritionAnalyzer.add(healthInfoPanel);
+                firstPanel.add(healthInfoPanel);
 
-                nutritionAnalyzer.revalidate();
-                nutritionAnalyzer.repaint();
+                firstPanel.revalidate();
+                firstPanel.repaint();
             }
         } 
         else if (command == "Save Recipe") {
