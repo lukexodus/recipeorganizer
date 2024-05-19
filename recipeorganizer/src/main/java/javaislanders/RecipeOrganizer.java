@@ -333,6 +333,64 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         0, 0, 1, 1, GridBagConstraints.CENTER);
 
 
+
+
+
+        // ----------------------------------------------------
+        // --                   2nd Panel                    --
+        // ----------------------------------------------------
+        // - Contains Recipe Groups panel and Recipe Categorization panel
+        // - Refer to:
+        // https://excalidraw.com/#json=DBau19YisTOxO_BHixQ_r,yCyuvZhxDG6rgqgjZjsAVQ
+        JPanel secondPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        // You can change the layout of the second panel if you want
+
+
+        // -------------------------------------
+        // --       Recipe Groups panel       --
+        // -------------------------------------
+        // Contains Recipe Groups panel, Recipes panel, and Ingredients Panel
+        //
+        // TODO
+
+        // Sample code, you can change this
+        JPanel recipeGroupsContainer = new JPanel(new FlowLayout());
+        JLabel recipeGroupsPlaceholder = new JLabel("Recipe groups");
+
+        recipeGroupsContainer.add(recipeGroupsPlaceholder);
+
+
+        // -------------------------------------
+        // --   Recipe Categorization panel   --
+        // -------------------------------------
+        //  - Contains the labels (diet and health)
+        //    and the types (cuisine, meal, and dish) lists
+        // 
+        // TODO
+
+        // Sample code, you can change this
+        JPanel recipeCategorizationContainer = new JPanel(new FlowLayout());
+        JLabel recipeCategorizationPlaceholder = new JLabel("Recipe categorization");
+
+        recipeCategorizationContainer.add(recipeCategorizationPlaceholder);
+
+
+
+
+
+        secondPanel.add(recipeGroupsContainer);
+        secondPanel.add(recipeCategorizationContainer);
+
+
+
+
+
+        addComponent(mainPanel, new JSeparator(), mainGbc, 
+        0, 1, 1, 1, GridBagConstraints.CENTER);
+        addComponent(mainPanel, secondPanel, mainGbc, 
+        0, 2, 1, 1, GridBagConstraints.CENTER);
+
+
         // [Other Event Handlers]
 
         // Handles the event when the contents of the Ingredients List changes
