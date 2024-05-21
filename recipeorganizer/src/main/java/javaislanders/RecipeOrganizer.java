@@ -376,7 +376,10 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         // Contains Recipe Groups panel & Recipes panel
         // and Ingredients panel
         
-        JPanel recipeGroupsRecipesPanel = new JPanel(new FlowLayout());
+        JPanel recipeGroupsRecipesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, hgap, 0));
+        JLabel recipeGroupsRecipesPanelPlaceholder = new JLabel("Recipe Groups Placeholder");
+
+        recipeGroupsRecipesPanel.add(recipeGroupsRecipesPanelPlaceholder);
 
 
         // -------------------------------------
