@@ -195,7 +195,7 @@ public class Recipe {
     }
 
     // Method to check if a recipe matches all criteria
-    public boolean matchesCriteria(String[] dietLabels, String[] healthLabels, String[] cuisineType, String[] mealType, String[] dishType) {
+    public boolean matchesCriteria(List<String> dietLabels, List<String> healthLabels, List<String> cuisineType, List<String> mealType, List<String> dishType) {
         // Check if all diet labels are present in the recipe
         if (!checkLabels(dietLabels, this.dietLabels)) {
             return false;
@@ -226,8 +226,8 @@ public class Recipe {
     }
 
     // Helper method to check if all labels are present in the recipe
-    private boolean checkLabels(String[] labels, List<String> recipeLabels) {
-        if (labels.length == 0) {
+    private boolean checkLabels(List<String> labels, List<String> recipeLabels) {
+        if (labels.size() == 0) {
             return true; // No labels to match, so return true
         }
         for (String label : labels) {
@@ -239,7 +239,7 @@ public class Recipe {
     }
 
     // Method to find recipes matching the specified criteria in the list
-    public static List<Recipe> findRecipesByCriteria(List<Recipe> recipes, String[] dietLabels, String[] healthLabels, String[] cuisineType, String[] mealType, String[] dishType) {
+    public static List<Recipe> findRecipesByCriteria(List<Recipe> recipes, List<String> dietLabels, List<String> healthLabels, List<String> cuisineType, List<String> mealType, List<String> dishType) {
         List<Recipe> matchedRecipes = new ArrayList<>();
         for (Recipe recipe : recipes) {
             if (recipe.matchesCriteria(dietLabels, healthLabels, cuisineType, mealType, dishType)) {

@@ -2,8 +2,6 @@ package javaislanders.types;
 
 import java.util.Map;
 
-import javaislanders.types.Nutrient;
-
 public class ParsedIngredient {
     private double quantity;
     private String measure;
