@@ -48,10 +48,10 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     private JFormattedTextField quantityTextField;
     private JTextField unitTextField;
     private JTextField ingrTextField;
-    private JButton removeIngrBtn;
-    private JButton clearIngrListBtn;
-    private JButton analyzeRecipeBtn;
-    private JButton saveRecipeBtn;
+    private JButton removeIngrButton;
+    private JButton clearIngrListButton;
+    private JButton analyzeRecipeButton;
+    private JButton saveRecipeButton;
     private Recipe currentRecipe;
     private boolean analyzedCurrentRecipe = false;
 
@@ -60,17 +60,17 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
     DefaultListModel<String> recipeGroupsModel;
     private JList<String> recipesList;
     DefaultListModel<String> recipesModel;
-    private JButton addRecipeGrpBtn;
-    private JButton removeRecipeGrpBtn;
-    private JButton renameRecipeGrpBtn;
-    private JButton moveRecipeBtn;
-    private JButton removeRecipeBtn;
-    private JButton renameRecipeBtn;
+    private JButton addRecipeGroupButton;
+    private JButton removeRecipeGroupButton;
+    private JButton renameRecipeGroupButton;
+    private JButton moveRecipeButton;
+    private JButton removeRecipeButton;
+    private JButton renameRecipeButton;
     private JList<String> ingredientsList;
     DefaultListModel<String> ingredientsModel;  // Right Panel
 
     // Recipe Categorization
-    private JButton unselectAllBtn;
+    private JButton unselectAllButton;
     private JList<String> dietLabelsList;
     private JList<String> healthLabelsList;
     private JList<String> cuisineTypesList;
@@ -145,7 +145,11 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             for (Recipe recipe : recipeItems) {
                 recipeTitles.add(recipe.getTitle());
                 if (recipe.getGroup() != null) {
-                    recipeGroups.add(recipe.getGroup());
+                    // Only add the group name to recipeGroups if it
+                    // is not added already
+                    if (!recipeGroups.contains(recipe.getGroup())) {
+                        recipeGroups.add(recipe.getGroup());
+                    }
                 }
             }
         } catch (IOException e) {
@@ -222,7 +226,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         addComponent(quantityPanel, quantityTextFieldLabel, analyzeRecipeGbc, 
         0, 0, 1, 1, GridBagConstraints.NORTHEAST);
         // Text Field
-        NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+        NumberFormat numberFormat = NumberFormat.getNumberInstance();
         quantityTextField = new JFormattedTextField(numberFormat);
         quantityTextField.setValue(0);  // Initial value
         quantityTextField.setPreferredSize(new Dimension(150, 30));
@@ -267,10 +271,10 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         0, 3, 2, 1, GridBagConstraints.CENTER);
 
         // Add Ingredient Button
-        JButton addIngrBtn = new JButton("Add");
-        addIngrBtn.setActionCommand("Add Ingredient");
-        addIngrBtn.addActionListener(this);
-        addComponent(analyzeRecipePanel, addIngrBtn, analyzeRecipeGbc, 
+        JButton addIngrButton = new JButton("Add");
+        addIngrButton.setActionCommand("Add Ingredient");
+        addIngrButton.addActionListener(this);
+        addComponent(analyzeRecipePanel, addIngrButton, analyzeRecipeGbc, 
         0, 4, 2, 1, GridBagConstraints.CENTER);
 
         // Ingredients List Label
@@ -279,19 +283,19 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         ingrListHeaderPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
         JLabel ingrListLabel = new JLabel("Ingredients List", SwingConstants.LEFT);
         ingrListLabel.setFont(new Font("Inter", Font.PLAIN, 15));
-        removeIngrBtn = new JButton("Remove");
-        removeIngrBtn.setEnabled(false);
-        removeIngrBtn.addActionListener(this);
-        removeIngrBtn.setActionCommand("Remove Ingredient");
-        clearIngrListBtn = new JButton("Clear");
-        clearIngrListBtn.setEnabled(false);
-        clearIngrListBtn.addActionListener(this);
-        clearIngrListBtn.setActionCommand("Clear Ingredients List");
+        removeIngrButton = new JButton("Remove");
+        removeIngrButton.setEnabled(false);
+        removeIngrButton.addActionListener(this);
+        removeIngrButton.setActionCommand("Remove Ingredient");
+        clearIngrListButton = new JButton("Clear");
+        clearIngrListButton.setEnabled(false);
+        clearIngrListButton.addActionListener(this);
+        clearIngrListButton.setActionCommand("Clear Ingredients List");
         ingrListHeaderPanel.add(ingrListLabel);
         ingrListHeaderPanel.add(Box.createHorizontalGlue());
-        ingrListHeaderPanel.add(clearIngrListBtn);
+        ingrListHeaderPanel.add(clearIngrListButton);
         ingrListHeaderPanel.add(Box.createHorizontalStrut(5));
-        ingrListHeaderPanel.add(removeIngrBtn);
+        ingrListHeaderPanel.add(removeIngrButton);
         addComponent(analyzeRecipePanel, ingrListHeaderPanel, analyzeRecipeGbc, 
         0, 5, 2, 1, GridBagConstraints.CENTER);
 
@@ -311,21 +315,21 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         0, 10, 2, 1, GridBagConstraints.CENTER);
 
         // Analyze Recipe Button
-        analyzeRecipeBtn = new JButton("Analyze Recipe");
-        analyzeRecipeBtn.setActionCommand("Analyze Recipe");
-        analyzeRecipeBtn.addActionListener(this);
-        addComponent(analyzeRecipePanel, analyzeRecipeBtn, analyzeRecipeGbc, 
+        analyzeRecipeButton = new JButton("Analyze Recipe");
+        analyzeRecipeButton.setActionCommand("Analyze Recipe");
+        analyzeRecipeButton.addActionListener(this);
+        addComponent(analyzeRecipePanel, analyzeRecipeButton, analyzeRecipeGbc, 
         0, 11, 2, 1, GridBagConstraints.CENTER);
 
         // Save Recipe Button
-        saveRecipeBtn = new JButton("Save Recipe");
-        saveRecipeBtn.setActionCommand("Save Recipe");
-        saveRecipeBtn.addActionListener(this);
-        addComponent(analyzeRecipePanel, saveRecipeBtn, analyzeRecipeGbc, 
+        saveRecipeButton = new JButton("Save Recipe");
+        saveRecipeButton.setActionCommand("Save Recipe");
+        saveRecipeButton.addActionListener(this);
+        addComponent(analyzeRecipePanel, saveRecipeButton, analyzeRecipeGbc, 
         0, 12, 2, 1, GridBagConstraints.CENTER);
         // Button is disabled by default.
         // User cannot save a recipe without being analyzed.
-        saveRecipeBtn.setEnabled(false);
+        saveRecipeButton.setEnabled(false);
 
 
         // -------------------------------------
@@ -373,13 +377,143 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         // -------------------------------------
         // --       Recipe Groups panel       --
         // -------------------------------------
-        // Contains Recipe Groups panel & Recipes panel
-        // and Ingredients panel
-        
-        JPanel recipeGroupsRecipesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, hgap, 0));
-        JLabel recipeGroupsRecipesPanelPlaceholder = new JLabel("Recipe Groups Placeholder");
+        // Contains Left panel (Recipe Groups panel & Recipes panel)
+        // and Right panel (Ingredients Panel)
 
-        recipeGroupsRecipesPanel.add(recipeGroupsRecipesPanelPlaceholder);
+        JPanel recipeGroupsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, hgap, 0));
+
+        // ---------------------------
+        // --   Left column panel   --
+        // ---------------------------
+
+        // Panel Containing Recipe Groups and Recipes (Left Column)
+        JPanel recipeGroupsLeftPanel = new JPanel();
+        recipeGroupsLeftPanel.setLayout(new BoxLayout(recipeGroupsLeftPanel, BoxLayout.Y_AXIS));
+        recipeGroupsLeftPanel.setPreferredSize(new Dimension(350, 700));
+
+        // [Recipe Groups]
+        JPanel recipeGroupsContainer = new JPanel(new BorderLayout());
+        // Header
+        JPanel recipeGroupsHeader = new JPanel();
+        recipeGroupsHeader.setLayout(new BoxLayout(recipeGroupsHeader, BoxLayout.X_AXIS));
+        recipeGroupsHeader.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        JLabel recipeGroupsTitle = new JLabel("Recipe Groups", SwingConstants.LEFT);
+        recipeGroupsTitle.setFont(new Font("Inter", Font.BOLD, 20));
+        // Buttons
+        addRecipeGroupButton = new JButton("Add"); // Add
+        addRecipeGroupButton.setActionCommand("Add Recipe Group");
+        addRecipeGroupButton.addActionListener(this);
+        addRecipeGroupButton.setMargin(new Insets(2, 10, 2, 10));
+        removeRecipeGroupButton = new JButton("Remove"); // Remove
+        removeRecipeGroupButton.setActionCommand("Remove Recipe Group");
+        removeRecipeGroupButton.addActionListener(this);
+        removeRecipeGroupButton.setMargin(new Insets(2, 10, 2, 10));
+        removeRecipeGroupButton.setEnabled(false);
+        renameRecipeGroupButton = new JButton("Rename"); // Rename
+        renameRecipeGroupButton.setActionCommand("Rename Recipe Group");
+        renameRecipeGroupButton.addActionListener(this);
+        renameRecipeGroupButton.setMargin(new Insets(2, 10, 2, 10));
+        renameRecipeGroupButton.setEnabled(false);
+
+        // Add to Header Panel
+        recipeGroupsHeader.add(recipeGroupsTitle);
+        recipeGroupsHeader.add(Box.createHorizontalGlue());
+        recipeGroupsHeader.add(addRecipeGroupButton);
+        recipeGroupsHeader.add(removeRecipeGroupButton);        
+        recipeGroupsHeader.add(renameRecipeGroupButton);        
+
+        // List (Content)
+        recipeGroupsModel = new DefaultListModel<>();
+        recipeGroupsList = new JList<>(recipeGroupsModel);
+        reloadRecipeGroupsList();
+        recipeGroupsList.addListSelectionListener(this);
+        recipeGroupsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane recipeGroupsPane = new JScrollPane(recipeGroupsList);
+        recipeGroupsPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        recipeGroupsContainer.add(recipeGroupsHeader, BorderLayout.NORTH);
+        recipeGroupsContainer.add(recipeGroupsPane, BorderLayout.CENTER);
+
+        // [Recipes]
+        JPanel recipesContainer = new JPanel(new BorderLayout());
+        // Header
+        JPanel recipesHeader = new JPanel();
+        recipesHeader.setLayout(new BoxLayout(recipesHeader, BoxLayout.X_AXIS));
+        recipesHeader.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        JLabel recipesTitle = new JLabel("Recipes", SwingConstants.LEFT);
+        recipesTitle.setFont(new Font("Inter", Font.BOLD, 20));
+        // Buttons
+        moveRecipeButton = new JButton("Move");
+        moveRecipeButton.setActionCommand("Move Recipe");
+        moveRecipeButton.addActionListener(this);
+        moveRecipeButton.setMargin(new Insets(2, 10, 2, 10));
+        moveRecipeButton.setEnabled(false);
+        removeRecipeButton = new JButton("Remove");
+        removeRecipeButton.setActionCommand("Remove Recipe");
+        removeRecipeButton.addActionListener(this);
+        removeRecipeButton.setMargin(new Insets(2, 10, 2, 10));
+        removeRecipeButton.setEnabled(false);
+        renameRecipeButton = new JButton("Rename");
+        renameRecipeButton.setActionCommand("Rename Recipe");
+        renameRecipeButton.addActionListener(this);
+        renameRecipeButton.setMargin(new Insets(2, 10, 2, 10));
+        renameRecipeButton.setEnabled(false);
+
+        // Add to Header
+        recipesHeader.add(recipesTitle);
+        recipesHeader.add(Box.createHorizontalGlue());
+        recipesHeader.add(moveRecipeButton);        
+        recipesHeader.add(removeRecipeButton);        
+        recipesHeader.add(renameRecipeButton);
+        
+        // List
+        recipesModel = new DefaultListModel<>();
+        recipesList = new JList<>(recipesModel);
+        recipesList.addListSelectionListener(this);
+        recipesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane recipesPane = new JScrollPane(recipesList);
+        recipesPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        // Add to Recipes
+        recipesContainer.add(recipesHeader, BorderLayout.NORTH);
+        recipesContainer.add(recipesPane, BorderLayout.CENTER);
+
+        // Add to Recipe Groups Left panel
+        recipeGroupsLeftPanel.add(recipeGroupsContainer);
+        recipeGroupsLeftPanel.add(Box.createVerticalStrut(30));
+        recipeGroupsLeftPanel.add(recipesContainer);
+
+
+        // ---------------------------
+        // --   Right column panel  --
+        // --   (Ingredients panel) --
+        // ---------------------------
+
+        // [Recipes]
+        JPanel recipeGroupsRightPanel = new JPanel(new BorderLayout());
+        recipeGroupsRightPanel.setPreferredSize(new Dimension(350, 700));
+        // Header
+        JPanel ingredientsHeader = new JPanel();
+        ingredientsHeader.setLayout(new BoxLayout(ingredientsHeader, BoxLayout.X_AXIS));
+        ingredientsHeader.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        JLabel ingredientsTitle = new JLabel("Ingredients", SwingConstants.LEFT);
+        ingredientsTitle.setFont(new Font("Inter", Font.BOLD, 20));
+        ingredientsHeader.add(ingredientsTitle);
+        // List
+        ingredientsModel = new DefaultListModel<>();
+        ingredientsList = new JList<>(ingredientsModel);
+        ingredientsList.addListSelectionListener(this);
+        ingredientsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane ingredientsPane = new JScrollPane(ingredientsList);
+        ingredientsPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        recipeGroupsRightPanel.add(ingredientsHeader, BorderLayout.NORTH);
+        recipeGroupsRightPanel.add(ingredientsPane, BorderLayout.CENTER);
+
+        // Add to Recipe Groups (Whole feature) panel
+        recipeGroupsPanel.add(recipeGroupsLeftPanel);
+        recipeGroupsPanel.add(recipeGroupsRightPanel);
+       
 
 
         // -------------------------------------
@@ -401,12 +535,12 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         recipeCategorizationHeader.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
         JLabel recipeCategorizationTitle = new JLabel("Recipe Categorization", SwingConstants.LEFT);
         recipeCategorizationTitle.setFont(new Font("Inter", Font.BOLD, 20));
-        unselectAllBtn = new JButton("Unselect All");
-        unselectAllBtn.setActionCommand("Unselect All Labels");
-        unselectAllBtn.addActionListener(this);
+        unselectAllButton = new JButton("Unselect All");
+        unselectAllButton.setActionCommand("Unselect All Labels");
+        unselectAllButton.addActionListener(this);
         recipeCategorizationHeader.add(recipeCategorizationTitle);
         recipeCategorizationHeader.add(Box.createHorizontalGlue());
-        recipeCategorizationHeader.add(unselectAllBtn);
+        recipeCategorizationHeader.add(unselectAllButton);
 
         // Content
         JPanel recipeCategorizationContent = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -423,7 +557,6 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
         // --  Diet Labels  --
         JPanel dietLabelsPanel = new JPanel(new BorderLayout());
-
         // Header
         JPanel dietLabelsHeader = new JPanel();
         dietLabelsHeader.setLayout(new BoxLayout(dietLabelsHeader, BoxLayout.X_AXIS));
@@ -431,7 +564,6 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         JLabel dietLabelsTitle = new JLabel("Diet Labels", SwingConstants.LEFT);
         dietLabelsTitle.setFont(new Font("Inter", Font.PLAIN, 17));
         dietLabelsHeader.add(dietLabelsTitle);
-
         // List
         String[] dietLabelsOptions = {"BALANCED", "HIGH FIBER", "HIGH PROTEIN", "LOW CARB", "LOW FAT", "LOW SODIUM"};
         dietLabelsList = new JList<>(dietLabelsOptions);
@@ -446,7 +578,6 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         // --  Health Labels  --
 
         JPanel healthLabelsPanel = new JPanel(new BorderLayout());
-
         // Header
         JPanel healthLabelsHeader = new JPanel();
         healthLabelsHeader.setLayout(new BoxLayout(healthLabelsHeader, BoxLayout.X_AXIS));
@@ -454,14 +585,13 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         JLabel healthLabelsTitle = new JLabel("Health Labels", SwingConstants.LEFT);
         healthLabelsTitle.setFont(new Font("Inter", Font.PLAIN, 17));
         healthLabelsHeader.add(healthLabelsTitle);
-
         // List
         String[] healthLabelsOptions = {"ALCOHOL COCKTAIL", "ALCOHOL FREE", "CELERY FREE", "CRUSTACEAN FREE", "DAIRY FREE", "DASH", "EGG FREE", "FISH FREE", "FODMAP FREE", "GLUTEN FREE", "IMMUNO SUPPORTIVE", "KETO FRIENDLY", "KIDNEY FRIENDLY", "KOSHER", "LOW POTASSIUM", "LOW SUGAR", "LUPINE FREE", "MEDITERRANEAN", "MOLLUSK FREE", "MUSTARD FREE", "NO OIL ADDED", "PALEO", "PEANUT FREE", "PESCATARIAN", "PORK FREE", "RED MEAT FREE", "SESAME FREE", "SHELLFISH FREE", "SOY FREE", "SUGAR CONSCIOUS", "SULPHITE FREE", "TREE NUT FREE", "VEGAN", "VEGETARIAN", "WHEAT FREE"};
         healthLabelsList = new JList<>(healthLabelsOptions);
         healthLabelsList.addListSelectionListener(this);
         healthLabelsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane healthLabelsPane = new JScrollPane(healthLabelsList);
-        healthLabelsPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        ingredientsPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         healthLabelsPanel.add(healthLabelsHeader, BorderLayout.NORTH);
         healthLabelsPanel.add(healthLabelsPane, BorderLayout.CENTER);
@@ -481,9 +611,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         categorizationRightPanel.setPreferredSize(new Dimension(350, 650));
 
         // --  Cuisine Types  --
-
         JPanel cuisineTypesPanel = new JPanel(new BorderLayout());
-
         // Header
         JPanel cuisineTypesHeader = new JPanel();
         cuisineTypesHeader.setLayout(new BoxLayout(cuisineTypesHeader, BoxLayout.X_AXIS));
@@ -491,22 +619,19 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         JLabel cuisineTypesTitle = new JLabel("Cuisine Types", SwingConstants.LEFT);
         cuisineTypesTitle.setFont(new Font("Inter", Font.PLAIN, 17));
         cuisineTypesHeader.add(cuisineTypesTitle);
-
         // List
         String[] cuisineTypesOptions = {"american", "asian", "british", "caribbean", "central europe", "chinese", "eastern europe", "french", "greek", "indian", "italian", "japanese", "korean", "kosher", "mediterranean", "mexican", "middle eastern", "nordic", "south american", "south east asian", "world"};
         cuisineTypesList = new JList<>(cuisineTypesOptions);
         cuisineTypesList.addListSelectionListener(this);
         cuisineTypesList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane cuisineTypesPane = new JScrollPane(cuisineTypesList);
-        cuisineTypesPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        ingredientsPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         cuisineTypesPanel.add(cuisineTypesHeader, BorderLayout.NORTH);
         cuisineTypesPanel.add(cuisineTypesPane, BorderLayout.CENTER);
 
         // --  Meal Types  --
-
         JPanel mealTypesPanel = new JPanel(new BorderLayout());
-
         // Header
         JPanel mealTypesHeader = new JPanel();
         mealTypesHeader.setLayout(new BoxLayout(mealTypesHeader, BoxLayout.X_AXIS));
@@ -514,21 +639,19 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         JLabel mealTypesTitle = new JLabel("Meal Types", SwingConstants.LEFT);
         mealTypesTitle.setFont(new Font("Inter", Font.PLAIN, 17));
         mealTypesHeader.add(mealTypesTitle);
-
         // List
         String[] mealTypesOptions = {"breakfast", "brunch", "lunch/dinner", "snack", "teatime"};
         mealTypesList = new JList<>(mealTypesOptions);
         mealTypesList.addListSelectionListener(this);
         mealTypesList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane mealTypesPane = new JScrollPane(mealTypesList);
-        mealTypesPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        ingredientsPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         mealTypesPanel.add(mealTypesHeader, BorderLayout.NORTH);
         mealTypesPanel.add(mealTypesPane, BorderLayout.CENTER);
 
         // --  Dish Types  --
         JPanel dishTypesPanel = new JPanel(new BorderLayout());
-
         // Header
         JPanel dishTypesHeader = new JPanel();
         dishTypesHeader.setLayout(new BoxLayout(dishTypesHeader, BoxLayout.X_AXIS));
@@ -536,14 +659,13 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         JLabel dishTypesTitle = new JLabel("Dish Types", SwingConstants.LEFT);
         dishTypesTitle.setFont(new Font("Inter", Font.PLAIN, 17));
         dishTypesHeader.add(dishTypesTitle);
-
         // List
         String[] dishTypesOptions = {"alcohol cocktail", "biscuits and cookies", "bread", "cereals", "condiments and sauces", "desserts", "drinks", "egg", "ice cream and custard", "main course", "pancake", "pasta", "pastry", "pies and tarts", "pizza", "preps", "preserve", "salad", "sandwiches", "seafood", "side dish", "soup", "special occasions", "starter", "sweets"};
         dishTypesList = new JList<>(dishTypesOptions);
         dishTypesList.addListSelectionListener(this);
         dishTypesList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane dishTypesPane = new JScrollPane(dishTypesList);
-        dishTypesPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        ingredientsPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         dishTypesPanel.add(dishTypesHeader, BorderLayout.NORTH);
         dishTypesPanel.add(dishTypesPane, BorderLayout.CENTER);
@@ -565,10 +687,10 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
         // firstPanel.setBackground(Color.YELLOW);
         // secondPanel.setBackground(Color.RED);
-        // recipeGroupsRecipesPanel.setBackground(Color.CYAN);
+        // recipeGroupsPanel.setBackground(Color.CYAN);
         // recipeCategorizationContainer.setBackground(Color.BLUE);
 
-        secondPanel.add(recipeGroupsRecipesPanel);        
+        secondPanel.add(recipeGroupsPanel);        
         secondPanel.add(recipeCategorizationContainer);       
         
 
@@ -663,11 +785,11 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             int ingrNum = ingrListModel.getSize();
             // Enables the 'Clear' button if there are items in the list
             if (ingrNum > 0) {
-                clearIngrListBtn.setEnabled(true);
+                clearIngrListButton.setEnabled(true);
             } 
             // Otherwise, enables it
             else {
-                clearIngrListBtn.setEnabled(false);
+                clearIngrListButton.setEnabled(false);
             }
         } 
         else if (command == "Remove Ingredient") {
@@ -681,7 +803,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
             // Disables the 'Clear' button if there are no items in the list
             if (ingrListModel.getSize() == 0) {
-                clearIngrListBtn.setEnabled(false);
+                clearIngrListButton.setEnabled(false);
             } 
         } 
         else if (command == "Clear Ingredients List") {
@@ -693,6 +815,11 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             int ingrNum = ingrListModel.getSize();
             if (ingrNum == 0) {
                 JOptionPane.showMessageDialog(mainPanel, "Ingredients list is empty.");
+                return;
+            }
+
+            if (analyzedCurrentRecipe) {
+                JOptionPane.showMessageDialog(mainPanel, "Already analyzed.");
                 return;
             }
 
@@ -711,7 +838,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
             try {
                 // Disables the button to prevent potential problems
-                analyzeRecipeBtn.setEnabled(false);
+                analyzeRecipeButton.setEnabled(false);
 
                 // Sends the request to the API
                 String response = analyzeIngredients(payload);
@@ -727,7 +854,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 analyzedCurrentRecipe = false;
             } finally {
                 // Enables back the button
-                analyzeRecipeBtn.setEnabled(true);
+                analyzeRecipeButton.setEnabled(true);
 
                 // Checks if the response has nutrition data or not.
                 // If it doesn't, it may be that the recipe inputted by the user
@@ -819,16 +946,242 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             currentRecipe = null;
             ingrListModel.clear();
             analyzedCurrentRecipe = false;
+
+            reloadRecipesList();
         }
 
         if (command == "Add Ingredient" || command == "Remove Ingredient" || command == "Clear Ingredients List" || command == "Analyze Recipe" || command == "Save Recipe") {
             // User can only save a recipe (i.e. the 'Save Recipe' button is enabled) 
             // if the current recipe has been analyzed.
             if (analyzedCurrentRecipe == true) {
-                saveRecipeBtn.setEnabled(true);
+                saveRecipeButton.setEnabled(true);
             } else {
-                saveRecipeBtn.setEnabled(false);
+                saveRecipeButton.setEnabled(false);
             }
+        }
+
+        if (command == "Add Recipe Group") {
+            String groupName = null;
+
+            // Use while loop for error-handling
+            while (true) {
+                groupName = JOptionPane.showInputDialog(null, "Enter group name: ", "Add Recipe Group", JOptionPane.QUESTION_MESSAGE);
+
+                // User cancelled the operation
+                if (groupName == null) {
+                    return;
+                }
+
+                if (groupName == "") {
+                    JOptionPane.showMessageDialog(mainPanel, "Invalid name. Please try again.");
+                    continue;
+                }
+
+                if (groupName == "Ungrouped") {
+                    JOptionPane.showMessageDialog(mainPanel, "Cannot use the group name. Please try other names.");
+                    continue;
+                }
+
+                if (recipeGroups.contains(groupName)) {
+                    JOptionPane.showMessageDialog(mainPanel, "Group name already used. Please try again.");
+                    continue;
+                }
+
+                break;
+            }
+
+            // Adds new group to the ArrayList
+            recipeGroups.add(groupName);
+
+            // Refresh group names in the list
+            reloadRecipeGroupsList();
+
+            // Disables the 'Remove' and 'Rename' buttons
+            removeRecipeGroupButton.setEnabled(false);
+            renameRecipeGroupButton.setEnabled(false);
+        } 
+        
+        if (command == "Remove Recipe Group") {
+            int selectedIndex = recipeGroupsList.getSelectedIndex();
+ 
+            // User should not be able to remove the 'Ungrouped' group 
+            if (selectedIndex == 0) {
+                JOptionPane.showMessageDialog(mainPanel, "Cannot remove the 'Ungrouped' group.");
+                return;
+            }
+
+            int choice = JOptionPane.showConfirmDialog(null, "All recipes that are in this group will be deleted. Press \"Yes\" to confirm deleting the group.", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (choice == JOptionPane.YES_OPTION) {
+                // If there is a selected item
+                if (selectedIndex != -1) {
+                    // Gets the selected value
+                    String selectedValue = recipeGroupsList.getSelectedValue().toString();
+
+                    // Remove group
+                    recipeGroups.remove(selectedValue);
+                    recipeGroupsModel.remove(selectedIndex);
+
+                    // Delete recipes that are in the group
+                    for (int i = 0; i < recipeItems.size(); i++) {
+                        if (recipeItems.get(i).getGroup() == selectedValue) {
+                            recipeItems.remove(i);
+                        }
+                    }   
+                }
+    
+                // Refresh group names in the list
+                reloadRecipeGroupsList();
+    
+                // Disables the 'Remove' and 'Rename' buttons
+                removeRecipeGroupButton.setEnabled(false);
+                renameRecipeGroupButton.setEnabled(false);
+            }
+        } 
+        
+        if (command == "Rename Recipe Group") {
+            // Rename selected ingredient from the list
+            int selectedIndex = recipeGroupsList.getSelectedIndex();
+            
+            // User should not be able to rename the 'Ungrouped' group 
+            if (selectedIndex == 0) {
+                JOptionPane.showMessageDialog(mainPanel, "Cannot rename the 'Ungrouped' group.");
+                return;
+            }
+
+            String groupName = null;
+
+            // Use while loop for error-handling
+            while (true) {
+                groupName = JOptionPane.showInputDialog(null, "Rename the group name to: ", "Rename Group", JOptionPane.QUESTION_MESSAGE);
+
+                // User cancelled the operation
+                if (groupName == null) {
+                    return;
+                }
+
+                if (groupName == "") {
+                    JOptionPane.showMessageDialog(mainPanel, "Invalid name. Please try again.");
+                    continue;
+                }
+
+                if (groupName == "Ungrouped") {
+                    JOptionPane.showMessageDialog(mainPanel, "Cannot use that as a group name. Please try other names.");
+                    continue;
+                }
+
+                if (recipeGroups.contains(groupName)) {
+                    JOptionPane.showMessageDialog(mainPanel, "Group name already used. Please try again.");
+                    continue;
+                }
+
+                break;
+            }
+
+            String oldGroupName = recipeGroupsList.getSelectedValue().toString();
+
+            // Changes all occurences of the old group name to the new group name
+            recipeGroups.remove(oldGroupName);
+            recipeGroups.add(groupName);
+            for (Recipe recipe : recipeItems) {
+                if (recipe.getGroup() == oldGroupName) {
+                    recipe.setGroup(groupName);
+                }
+            }
+
+            reloadRecipeGroupsList();
+        } 
+
+
+        if (command == "Move Recipe") {
+            String group = selectGroup("Select the number of the group to which the recipe will be moved.", true);
+
+            // User cancelled the operation
+            if (group == null) {
+                return;
+            }
+
+            if (group == "Ungrouped") {
+                group = null;  // Ungrouped recipes have the `null` group value in JSON
+            }
+
+            String selectedRecipeTitle = recipesList.getSelectedValue().toString();
+            for (Recipe recipe : recipeItems) {
+                if (recipe.getTitle() == selectedRecipeTitle) {
+                    recipe.setGroup(group);
+                }
+            }
+
+            reloadRecipesList();
+        } 
+        
+        if (command == "Remove Recipe") {
+            String selectedValue = recipesList.getSelectedValue().toString();
+
+            int choice = JOptionPane.showConfirmDialog(null, "Confirm deletion of recipe \"" + selectedValue + "\".", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (choice == JOptionPane.YES_OPTION) {
+                // Remove recipe
+                recipeTitles.remove(selectedValue);
+                
+                for (int i = 0; i < recipeItems.size(); i++) {
+                    if (recipeItems.get(i).getTitle() == selectedValue) {
+                        recipeItems.remove(i);
+                    }
+                } 
+            } else {
+                return;
+            }
+
+            reloadRecipesList();
+        } 
+        
+        if (command == "Rename Recipe") {
+            String newName = null;
+
+            // Use while loop for error-handling
+            while (true) {
+                newName = JOptionPane.showInputDialog(null, "Change the recipe name to: ", "Rename Recipe", JOptionPane.QUESTION_MESSAGE);
+
+                // User cancelled the operation
+                if (newName == null) {
+                    return;
+                }
+
+                if (newName == "") {
+                    JOptionPane.showMessageDialog(mainPanel, "Invalid name. Please try again.");
+                    continue;
+                }
+
+                if (recipeTitles.contains(newName)) {
+                    JOptionPane.showMessageDialog(mainPanel, "Recipe name is already used. Please try again.");
+                    continue;
+                }
+
+                break;
+            }
+
+            String oldName = recipesList.getSelectedValue().toString();
+
+            // Changes all occurences of the old name to the new name
+            recipeTitles.remove(oldName);
+            recipeTitles.add(newName);
+            for (Recipe recipe : recipeItems) {
+                if (recipe.getTitle() == oldName) {
+                    recipe.setTitle(newName);
+                    break;
+                }
+            }
+
+            reloadRecipesList();
+        } 
+
+        if (command == "Unselect All Labels") {
+            dietLabelsList.clearSelection();
+            healthLabelsList.clearSelection();
+            cuisineTypesList.clearSelection();
+            mealTypesList.clearSelection();
+            dishTypesList.clearSelection();
         }
     }
 
@@ -846,12 +1199,271 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 int selectedIndex = ingrList.getSelectedIndex();
                 // Enables the 'Remove' button if there is an item selected
                 if (selectedIndex != -1) {
-                    removeIngrBtn.setEnabled(true);
+                    removeIngrButton.setEnabled(true);
                 } 
                 // Otherwise, disables it
                 else {
-                    removeIngrBtn.setEnabled(false);
+                    removeIngrButton.setEnabled(false);
                 }
+            }
+
+            // Recipe Groups List
+            if (sourceList == recipeGroupsList) {
+                String selectedValue = recipeGroupsList.getSelectedValue();
+                
+                // If there is a selected item
+                if (selectedValue != null) {
+                    // Enables the 'Remove' and 'Rename' buttons
+                    removeRecipeGroupButton.setEnabled(true);
+                    renameRecipeGroupButton.setEnabled(true);
+
+                    reloadRecipesList();
+                } 
+                // i.e. there are no selected item/s
+                else {
+                    // Disables the 'Remove' and 'Rename' buttons
+                    removeRecipeGroupButton.setEnabled(false);
+                    renameRecipeGroupButton.setEnabled(false);
+
+                    recipesModel.clear();
+                }
+            }
+
+            // Recipes List
+            if (sourceList == recipesList) {
+                String selectedValue = recipesList.getSelectedValue();
+
+                // If there is a selected item
+                if (selectedValue != null) {
+                    selectedValue = selectedValue.toString();
+
+                    // Enables the 'Move', 'Remove' and 'Rename' buttons
+                    moveRecipeButton.setEnabled(true);
+                    removeRecipeButton.setEnabled(true);
+                    renameRecipeButton.setEnabled(true);
+
+                    // Gets the recipe object
+                    Recipe targetRecipe = null;
+                    for (Recipe recipe : recipeItems) {
+                        if (recipe.getTitle() == selectedValue) {
+                            targetRecipe = recipe;
+                            break;
+                        }
+                    }
+
+                    // Shows the ingredients of the recipe
+                    // on the Ingredients list
+                    ingredientsModel.clear();
+                    List<Ingredient> ingredients = targetRecipe.getIngredients();
+                    for (Ingredient ingr : ingredients) {
+                        ingredientsModel.addElement(ingr.getText());
+                    }
+
+                    // Shows the NutritionFacts, LabelInfo, and TypeInfo of the recipe.
+                    // Removes the previous panels
+                    // and then adds the updated ones.
+                    Component[] components = firstPanel.getComponents();
+                    if (components.length > 0) {
+                        firstPanel.remove(components[components.length - 1]);
+                        firstPanel.remove(components[components.length - 2]);
+                        firstPanel.remove(components[components.length - 3]);
+                    }
+                    NutritionFacts nutritionFactsPanel = new NutritionFacts(targetRecipe);
+                    firstPanel.add(nutritionFactsPanel);
+
+                    LabelInfo labelInfoPanel = new LabelInfo(targetRecipe);
+                    firstPanel.add(labelInfoPanel);
+
+                    TypeInfo healthInfoPanel = new TypeInfo(targetRecipe);
+                    firstPanel.add(healthInfoPanel);
+
+                    firstPanel.revalidate();
+                    firstPanel.repaint();
+                } else {
+                    // Disables the 'Move', 'Remove' and 'Rename' buttons
+                    moveRecipeButton.setEnabled(false);
+                    removeRecipeButton.setEnabled(false);
+                    renameRecipeButton.setEnabled(false);
+
+                    // Clears the Ingredients list
+                    ingredientsModel.clear();
+
+                    // Clears the NutritionFacts, LabelInfo, and TypeInfo.
+                    // Removes the previous panels
+                    // and then adds the updated ones.
+                    Component[] components = firstPanel.getComponents();
+                    if (components.length > 0) {
+                        firstPanel.remove(components[components.length - 1]);
+                        firstPanel.remove(components[components.length - 2]);
+                        firstPanel.remove(components[components.length - 3]);
+                    }
+                    NutritionFacts nutritionFactsPanel = new NutritionFacts(null);
+                    firstPanel.add(nutritionFactsPanel);
+
+                    LabelInfo labelInfoPanel = new LabelInfo(null);
+                    firstPanel.add(labelInfoPanel);
+
+                    TypeInfo healthInfoPanel = new TypeInfo(null);
+                    firstPanel.add(healthInfoPanel);
+
+                    firstPanel.revalidate();
+                    firstPanel.repaint();
+                }
+            }
+
+            // Diet Labels List
+            if (sourceList == dietLabelsList) {
+                // Gets the index of the first element selected
+                int selectedIndex = dietLabelsList.getSelectedIndex();
+                // Get the list of selected values
+                List<String> selectedValues = dietLabelsList.getSelectedValuesList();
+
+                // Updates dietLabels with the new selected values
+                dietLabels.clear();
+                for (String label : selectedValues) {
+                    String labelWithUnderscores = label.replace(' ', '_');
+                    dietLabels.add(labelWithUnderscores);
+                }
+
+                // Clears the Recipes list
+                recipesModel.clear();
+
+                // Fills the Recipes list with the matched recipes
+                List<Recipe> matchedRecipes;
+                if (selectedIndex != -1) {
+                    matchedRecipes = Recipe.findRecipesByCriteria(recipeItems, dietLabels, healthLabels, cuisineTypes, mealTypes, dishTypes);
+
+                    for (Recipe recipe : matchedRecipes) {
+                        recipesModel.addElement(recipe.getTitle());
+                    }
+                }
+
+                // Unselects (if any) the selected values in the Recipe Groups list
+                recipeGroupsList.clearSelection();
+            }
+
+
+            // Health Labels List
+            if (sourceList == healthLabelsList) {
+                // Gets the index of the first element selected
+                int selectedIndex = healthLabelsList.getSelectedIndex();
+                // Get the list of selected values
+                List<String> selectedValues = healthLabelsList.getSelectedValuesList();
+
+                // Updates healthLabels with the new selected values
+                healthLabels.clear();
+                for (String label : selectedValues) {
+                    String labelWithUnderscores = label.replace(' ', '_');
+                    healthLabels.add(labelWithUnderscores);
+                }
+
+                // Clears the Recipes list
+                recipesModel.clear();
+
+                // Fills the Recipes list with the matched recipes
+                List<Recipe> matchedRecipes;
+                if (selectedIndex != -1) {
+                    matchedRecipes = Recipe.findRecipesByCriteria(recipeItems, dietLabels, healthLabels, cuisineTypes, mealTypes, dishTypes);
+
+                    for (Recipe recipe : matchedRecipes) {
+                        recipesModel.addElement(recipe.getTitle());
+                    }
+                }
+
+                // Unselects (if any) the selected values in the Recipe Groups list
+                recipeGroupsList.clearSelection();
+            }
+
+
+            // Cuisine Types List
+            if (sourceList == cuisineTypesList) {
+                // Gets the index of the first element selected
+                int selectedIndex = cuisineTypesList.getSelectedIndex();
+                // Get the list of selected values
+                List<String> selectedValues = cuisineTypesList.getSelectedValuesList();
+
+                // Updates cuisineTypes with the new selected values
+                cuisineTypes.clear();
+                for (String label : selectedValues) {
+                    cuisineTypes.add(label);
+                }
+
+                // Clears the Recipes list
+                recipesModel.clear();
+
+                // Fills the Recipes list with the matched recipes
+                List<Recipe> matchedRecipes;
+                if (selectedIndex != -1) {
+                    matchedRecipes = Recipe.findRecipesByCriteria(recipeItems, dietLabels, healthLabels, cuisineTypes, mealTypes, dishTypes);
+
+                    for (Recipe recipe : matchedRecipes) {
+                        recipesModel.addElement(recipe.getTitle());
+                    }
+                }
+
+                // Unselects (if any) the selected values in the Recipe Groups list
+                recipeGroupsList.clearSelection();
+            }
+
+            // Meal Types List
+            if (sourceList == mealTypesList) {
+                // Gets the index of the first element selected
+                int selectedIndex = mealTypesList.getSelectedIndex();
+                // Get the list of selected values
+                List<String> selectedValues = mealTypesList.getSelectedValuesList();
+
+                // Updates mealTypes with the new selected values
+                mealTypes.clear();
+                for (String label : selectedValues) {
+                    mealTypes.add(label);
+                }
+
+                // Clears the Recipes list
+                recipesModel.clear();
+
+                // Fills the Recipes list with the matched recipes
+                List<Recipe> matchedRecipes;
+                if (selectedIndex != -1) {
+                    matchedRecipes = Recipe.findRecipesByCriteria(recipeItems, dietLabels, healthLabels, cuisineTypes, mealTypes, dishTypes);
+
+                    for (Recipe recipe : matchedRecipes) {
+                        recipesModel.addElement(recipe.getTitle());
+                    }
+                }
+
+                // Unselects (if any) the selected values in the Recipe Groups list
+                recipeGroupsList.clearSelection();
+            }
+
+            
+            // Dish Types List
+            if (sourceList == dishTypesList) {
+                // Gets the index of the first element selected
+                int selectedIndex = dishTypesList.getSelectedIndex();
+                // Get the list of selected values
+                List<String> selectedValues = dishTypesList.getSelectedValuesList();
+
+                // Updates dishTypes with the new selected values
+                dishTypes.clear();
+                for (String label : selectedValues) {
+                    dishTypes.add(label);
+                }
+
+                // Clears the Recipes list
+                recipesModel.clear();
+
+                // Fills the Recipes list with the matched recipes
+                List<Recipe> matchedRecipes;
+                if (selectedIndex != -1) {
+                    matchedRecipes = Recipe.findRecipesByCriteria(recipeItems, dietLabels, healthLabels, cuisineTypes, mealTypes, dishTypes);
+
+                    for (Recipe recipe : matchedRecipes) {
+                        recipesModel.addElement(recipe.getTitle());
+                    }
+                }
+
+                // Unselects (if any) the selected values in the Recipe Groups list
+                recipeGroupsList.clearSelection();
             }
         }
     }
@@ -922,6 +1534,43 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         }
 
         return recipeGroups.get(groupIndex);
+    }
+
+    private void reloadRecipeGroupsList() {
+        recipeGroupsModel.clear();
+        recipeGroupsModel.addElement("Ungrouped");
+        for (String group : recipeGroups) {
+            recipeGroupsModel.addElement(group);
+        }
+    }
+
+    private void reloadRecipesList() {
+        // Updates the recipes in the Recipes List
+        recipesModel.clear();
+        String selectedGroup = recipeGroupsList.getSelectedValue();
+        // If there is a selected value
+        if (selectedGroup != null) {
+            // Converts it to string
+            selectedGroup = selectedGroup.toString();
+
+            // If "Ungrouped" selected, show the recipes 
+            // that are ungrouped on the "Recipes" list.
+            if (selectedGroup == "Ungrouped") {
+                for (Recipe recipe : recipeItems) {
+                    if (recipe.getGroup() == null) {
+                        recipesModel.addElement(recipe.getTitle());
+                    }
+                }
+            } 
+            // Else, show the recipes in the selected group
+            else {
+                for (Recipe recipe : recipeItems) {
+                    if (recipe.getGroup() == selectedGroup) {
+                        recipesModel.addElement(recipe.getTitle());
+                    }
+                }
+            }
+        }
     }
 }
  
