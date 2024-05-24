@@ -1026,7 +1026,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
                     // Delete recipes that are in the group
                     for (int i = 0; i < recipeItems.size(); i++) {
-                        if (recipeItems.get(i).getGroup() == selectedValue) {
+                        if (recipeItems.get(i).getGroup().equals(selectedValue)) {
                             recipeItems.remove(i);
                         }
                     }   
@@ -1086,7 +1086,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             recipeGroups.remove(oldGroupName);
             recipeGroups.add(groupName);
             for (Recipe recipe : recipeItems) {
-                if (recipe.getGroup() == oldGroupName) {
+                if (recipe.getGroup().equals(oldGroupName)) {
                     recipe.setGroup(groupName);
                 }
             }
@@ -1109,7 +1109,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
 
             String selectedRecipeTitle = recipesList.getSelectedValue().toString();
             for (Recipe recipe : recipeItems) {
-                if (recipe.getTitle() == selectedRecipeTitle) {
+                if (recipe.getTitle().equals(selectedRecipeTitle)) {
                     recipe.setGroup(group);
                 }
             }
@@ -1127,7 +1127,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 recipeTitles.remove(selectedValue);
                 
                 for (int i = 0; i < recipeItems.size(); i++) {
-                    if (recipeItems.get(i).getTitle() == selectedValue) {
+                    if (recipeItems.get(i).getTitle().equals(selectedValue)) {
                         recipeItems.remove(i);
                     }
                 } 
@@ -1169,7 +1169,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             recipeTitles.remove(oldName);
             recipeTitles.add(newName);
             for (Recipe recipe : recipeItems) {
-                if (recipe.getTitle() == oldName) {
+                if (recipe.getTitle().equals(oldName)) {
                     recipe.setTitle(newName);
                     break;
                 }
@@ -1247,7 +1247,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                     // Gets the recipe object
                     Recipe targetRecipe = null;
                     for (Recipe recipe : recipeItems) {
-                        if (recipe.getTitle() == selectedValue) {
+                        if (recipe.getTitle().equals(selectedValue)) {
                             targetRecipe = recipe;
                             break;
                         }
