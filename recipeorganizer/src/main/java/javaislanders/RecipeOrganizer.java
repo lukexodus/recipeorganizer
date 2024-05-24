@@ -156,6 +156,8 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             e.printStackTrace();
         }
 
+        System.out.println(recipeTitles.toString());
+
 
 
         // --------------------------------------------------------------
@@ -760,7 +762,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         // Determines which button is clicked
         String command = e.getActionCommand();
 
-        if (command == "Add Ingredient") {
+        if (command.equals("Add Ingredient")) {
             // Get text field contents
             String quantity = quantityTextField.getText();
             String unit = unitTextField.getText();
@@ -792,7 +794,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 clearIngrListButton.setEnabled(false);
             }
         } 
-        else if (command == "Remove Ingredient") {
+        else if (command.equals("Remove Ingredient")) {
             // Remove selected ingredient from the list
             int selectedIndex = ingrList.getSelectedIndex();
             if (selectedIndex != -1) {
@@ -806,11 +808,11 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 clearIngrListButton.setEnabled(false);
             } 
         } 
-        else if (command == "Clear Ingredients List") {
+        else if (command.equals("Clear Ingredients List")) {
             // Remove all items in the ingredients list
             ingrListModel.clear();
         } 
-        else if (command == "Analyze Recipe") {
+        else if (command.equals("Analyze Recipe")) {
             // Alerts the user if the ingredients list is empty
             int ingrNum = ingrListModel.getSize();
             if (ingrNum == 0) {
@@ -886,7 +888,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 firstPanel.repaint();
             }
         } 
-        else if (command == "Save Recipe") {
+        else if (command.equals("Save Recipe")) {
             // Alerts the user if the ingredients list is empty
             int ingrNum = ingrListModel.getSize();
             if (ingrNum == 0) {
@@ -950,7 +952,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             reloadRecipesList();
         }
 
-        if (command == "Add Ingredient" || command == "Remove Ingredient" || command == "Clear Ingredients List" || command == "Analyze Recipe" || command == "Save Recipe") {
+        if (command.equals("Add Ingredient") || command.equals("Remove Ingredient") || command.equals("Clear Ingredients List") || command.equals("Analyze Recipe") || command.equals("Save Recipe")) {
             // User can only save a recipe (i.e. the 'Save Recipe' button is enabled) 
             // if the current recipe has been analyzed.
             if (analyzedCurrentRecipe == true) {
@@ -960,7 +962,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             }
         }
 
-        if (command == "Add Recipe Group") {
+        if (command.equals("Add Recipe Group")) {
             String groupName = null;
 
             // Use while loop for error-handling
@@ -972,12 +974,12 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                     return;
                 }
 
-                if (groupName == "") {
+                if (groupName.equals("")) {
                     JOptionPane.showMessageDialog(mainPanel, "Invalid name. Please try again.");
                     continue;
                 }
 
-                if (groupName == "Ungrouped") {
+                if (groupName.equals("Ungrouped")) {
                     JOptionPane.showMessageDialog(mainPanel, "Cannot use the group name. Please try other names.");
                     continue;
                 }
@@ -1001,7 +1003,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             renameRecipeGroupButton.setEnabled(false);
         } 
         
-        if (command == "Remove Recipe Group") {
+        if (command.equals("Remove Recipe Group")) {
             int selectedIndex = recipeGroupsList.getSelectedIndex();
  
             // User should not be able to remove the 'Ungrouped' group 
@@ -1039,7 +1041,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             }
         } 
         
-        if (command == "Rename Recipe Group") {
+        if (command.equals("Rename Recipe Group")) {
             // Rename selected ingredient from the list
             int selectedIndex = recipeGroupsList.getSelectedIndex();
             
@@ -1060,12 +1062,12 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                     return;
                 }
 
-                if (groupName == "") {
+                if (groupName.equals("")) {
                     JOptionPane.showMessageDialog(mainPanel, "Invalid name. Please try again.");
                     continue;
                 }
 
-                if (groupName == "Ungrouped") {
+                if (groupName.equals("Ungrouped")) {
                     JOptionPane.showMessageDialog(mainPanel, "Cannot use that as a group name. Please try other names.");
                     continue;
                 }
@@ -1093,7 +1095,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
         } 
 
 
-        if (command == "Move Recipe") {
+        if (command.equals("Move Recipe")) {
             String group = selectGroup("Select the number of the group to which the recipe will be moved.", true);
 
             // User cancelled the operation
@@ -1101,7 +1103,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                 return;
             }
 
-            if (group == "Ungrouped") {
+            if (group.equals("Ungrouped")) {
                 group = null;  // Ungrouped recipes have the `null` group value in JSON
             }
 
@@ -1115,7 +1117,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             reloadRecipesList();
         } 
         
-        if (command == "Remove Recipe") {
+        if (command.equals("Remove Recipe")) {
             String selectedValue = recipesList.getSelectedValue().toString();
 
             int choice = JOptionPane.showConfirmDialog(null, "Confirm deletion of recipe \"" + selectedValue + "\".", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -1136,7 +1138,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             reloadRecipesList();
         } 
         
-        if (command == "Rename Recipe") {
+        if (command.equals("Rename Recipe")) {
             String newName = null;
 
             // Use while loop for error-handling
@@ -1148,7 +1150,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
                     return;
                 }
 
-                if (newName == "") {
+                if (newName.equals("")) {
                     JOptionPane.showMessageDialog(mainPanel, "Invalid name. Please try again.");
                     continue;
                 }
@@ -1176,7 +1178,7 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             reloadRecipesList();
         } 
 
-        if (command == "Unselect All Labels") {
+        if (command.equals("Unselect All Labels")) {
             dietLabelsList.clearSelection();
             healthLabelsList.clearSelection();
             cuisineTypesList.clearSelection();
@@ -1553,9 +1555,9 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             // Converts it to string
             selectedGroup = selectedGroup.toString();
 
-            // If "Ungrouped" selected, show the recipes 
-            // that are ungrouped on the "Recipes" list.
-            if (selectedGroup == "Ungrouped") {
+            // If "Ungrouped" is selected, show the recipes 
+            // that have no groups on the "Recipes" list.
+            if (selectedGroup.equals("Ungrouped")) {
                 for (Recipe recipe : recipeItems) {
                     if (recipe.getGroup() == null) {
                         recipesModel.addElement(recipe.getTitle());
@@ -1564,8 +1566,9 @@ public class RecipeOrganizer extends JFrame implements ActionListener, ListSelec
             } 
             // Else, show the recipes in the selected group
             else {
+                int i = 1;
                 for (Recipe recipe : recipeItems) {
-                    if (recipe.getGroup() == selectedGroup) {
+                    if (recipe.getGroup() != null && recipe.getGroup().equals(selectedGroup)) {
                         recipesModel.addElement(recipe.getTitle());
                     }
                 }
