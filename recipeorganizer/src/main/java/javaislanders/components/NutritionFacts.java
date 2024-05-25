@@ -12,7 +12,6 @@ public class NutritionFacts extends JScrollPane {
         this.setBorder(new RoundedBorder(20));
 
         JPanel nutritionFactsPanel = new JPanel(new GridBagLayout());
-        // nutritionFactsPanel.setPreferredSize(new Dimension(325, 600));
 
         GridBagConstraints nutritionFactsGbc = new GridBagConstraints();
         nutritionFactsGbc.fill = GridBagConstraints.HORIZONTAL;
