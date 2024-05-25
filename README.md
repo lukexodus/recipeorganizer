@@ -4,8 +4,6 @@
 
 ### Nutrition Analysis
 
-Status: Started, Unfinished
-
 - API used: https://api.edamam.com/api/nutrition-details
   - Documentation: https://developer.edamam.com/edamam-docs-nutrition-api
 - User inputs ingredients for a recipe and then the program analyzes the recipe and gives the nutrition data and other information about the recipe.
@@ -14,18 +12,13 @@ Status: Started, Unfinished
 
 ### Recipe Categorization
 
-Status: Unfinished
-
 - User can search stored recipes by categories (label and type).
 - There are two types of labels: diet labels and health labels.
 - There are three types of types: cuisine type, meal type, and dish type.
-- Every time a recipe is selected by the user, its nutrition facts, labels, and types are shown (just like in the nutrition analysis feature).
 
 ### Recipe Groups
 
-Status: Unfinished
-
 - User can make, rename, and delete groups.
-- User can add or remove recipes to/from groups.
+- User can move recipes to/from groups.
 - User can select a recipe from the lists/groups.
 - Every time a recipe is selected by the user, its nutrition facts, labels, and types are shown (just like in the nutrition analysis feature).
